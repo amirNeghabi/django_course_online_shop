@@ -1,0 +1,315 @@
+/* استایل‌های سفارشی برای پنل ادمین فروشگاه */
+
+/* رنگ‌های اصلی */
+:root {
+    --primary-color: #007bff;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+}
+
+/* هدر پنل ادمین */
+#header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-bottom: 3px solid #5568d3;
+}
+
+#branding h1 {
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    font-weight: 700;
+}
+
+#user-tools {
+    color: #ffffff;
+}
+
+#user-tools a {
+    color: #ffffff;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom 0.3s;
+}
+
+#user-tools a:hover {
+    border-bottom: 1px solid #ffffff;
+}
+
+/* منوی کناری */
+.module h2, .module caption, .inline-group h2 {
+    background: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* دکمه‌ها */
+.button, input[type=submit], input[type=button], .submit-row input, a.button {
+    background: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);
+    border: none;
+    padding: 10px 20px;
+    font-weight: 600;
+    border-radius: 5px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.button:hover, input[type=submit]:hover, input[type=button]:hover {
+    background: linear-gradient(to bottom, #5568d3 0%, #6543a5 100%);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transform: translateY(-1px);
+}
+
+/* جدول‌ها */
+#result_list {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#result_list thead th {
+    background: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);
+    color: #ffffff;
+    font-weight: 600;
+    padding: 12px;
+}
+
+#result_list tbody tr {
+    transition: background-color 0.2s;
+}
+
+#result_list tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+#result_list tbody tr:nth-child(even) {
+    background-color: #f1f3f5;
+}
+
+/* فرم‌ها */
+.form-row {
+    padding: 12px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.form-row:hover {
+    background-color: #f8f9fa;
+}
+
+/* فیلترها */
+#changelist-filter {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+#changelist-filter h2 {
+    background: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);
+    color: #ffffff;
+    padding: 10px;
+    margin: -15px -15px 15px -15px;
+    border-radius: 8px 8px 0 0;
+}
+
+#changelist-filter li {
+    padding: 8px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+#changelist-filter li:last-child {
+    border-bottom: none;
+}
+
+/* نوار جستجو */
+#changelist-search {
+    margin-bottom: 20px;
+}
+
+#searchbar {
+    border: 2px solid #667eea;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+#searchbar:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+/* پیام‌ها */
+.messagelist {
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.messagelist li {
+    padding: 15px 20px;
+    font-weight: 500;
+}
+
+.messagelist li.success {
+    background: linear-gradient(to right, #28a745, #20c997);
+    color: #ffffff;
+}
+
+.messagelist li.warning {
+    background: linear-gradient(to right, #ffc107, #fd7e14);
+    color: #212529;
+}
+
+.messagelist li.error {
+    background: linear-gradient(to right, #dc3545, #c82333);
+    color: #ffffff;
+}
+
+.messagelist li.info {
+    background: linear-gradient(to right, #17a2b8, #138496);
+    color: #ffffff;
+}
+
+/* کارت‌های داشبورد */
+.module {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+/* تب‌ها */
+.inline-group .tabular {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* بهبود responsive */
+@media (max-width: 768px) {
+    #changelist-filter {
+        position: relative;
+        float: none;
+        width: 100%;
+        margin-top: 20px;
+    }
+    
+    #toolbar {
+        padding: 10px;
+    }
+}
+
+/* انیمیشن برای المان‌های جدید */
+.row1, .row2 {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* استایل برای آیکون‌های اکشن */
+.action-checkbox {
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+/* بهبود نمایش inline forms */
+.inline-related {
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #f8f9fa;
+}
+
+/* استایل برای breadcrumbs */
+.breadcrumbs {
+    background: #ffffff;
+    border-bottom: 2px solid #667eea;
+    padding: 12px 20px;
+    font-size: 14px;
+}
+
+.breadcrumbs a {
+    color: #667eea;
+    font-weight: 500;
+}
+
+.breadcrumbs a:hover {
+    color: #5568d3;
+    text-decoration: underline;
+}
+
+/* بهبود fieldset */
+.module fieldset {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.module fieldset h2 {
+    background: none;
+    color: #667eea;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* اسکرول بار سفارشی */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #667eea 0%, #764ba2 100%);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #5568d3 0%, #6543a5 100%);
+}
+
+/* بهبود نمایش تصاویر */
+img {
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* استایل برای لینک‌ها */
+a {
+    transition: color 0.2s;
+}
+
+/* بهبود نمایش کارت‌های اصلی */
+.app-products, .app-orders, .app-accounts {
+    border-left: 4px solid #667eea;
+}
+
+/* Loading Spinner */
+.spinner {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
