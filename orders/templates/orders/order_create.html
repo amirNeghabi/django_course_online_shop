@@ -1,138 +1,553 @@
 {% extends '_base.html' %}
-
 {% load i18n %}
-{% load crispy_forms_tags %}
-{% load persian_translation_tags %}
 {% load humanize %}
 
+{% block page_title %}ثبت سفارش | فروشگاه کدینگ‌یار{% endblock %}
+
 {% block content %}
-    <!-- Main Content Wrapper Start -->
-    <div class="main-content-wrapper">
+<style>
+    /* استایل‌های صفحه سفارش */
+    .order-container {
+        background: #f8f9fa;
+        min-height: 100vh;
+        padding: 40px 0;
+    }
+    
+    .order-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    .order-header h1 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 700;
+    }
+    
+    .order-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        position: relative;
+    }
+    
+    .order-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        flex: 1;
+    }
+    
+    .step-number {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .step-number.active {
+        background: white;
+        color: #667eea;
+    }
+    
+    .step-label {
+        font-size: 13px;
+        text-align: center;
+    }
+    
+    /* کارت فرم */
+    .form-card {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 30px;
+    }
+    
+    .form-card-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e9ecef;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    /* فیلدهای فرم */
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-label {
+        display: block;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+    
+    .required {
+        color: #dc3545;
+        margin-right: 3px;
+    }
+    
+    .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: all 0.3s;
+        direction: rtl;
+    }
+    
+    .form-input:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    
+    .form-input::placeholder {
+        color: #adb5bd;
+    }
+    
+    textarea.form-input {
+        resize: vertical;
+        min-height: 100px;
+    }
+    
+    /* کارت خلاصه سفارش */
+    .order-summary {
+        background: white;
+        border-radius: 12px;
+        padding: 30px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        position: sticky;
+        top: 100px;
+    }
+    
+    .summary-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e9ecef;
+    }
+    
+    /* آیتم محصول */
+    .order-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 0;
+        border-bottom: 1px solid #f1f3f5;
+    }
+    
+    .order-item:last-child {
+        border-bottom: none;
+    }
+    
+    .item-info {
+        flex: 1;
+    }
+    
+    .item-title {
+        font-weight: 600;
+        color: #2d3748;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+    
+    .item-quantity {
+        font-size: 13px;
+        color: #6c757d;
+    }
+    
+    .item-price {
+        font-weight: 700;
+        color: #28a745;
+        font-size: 16px;
+    }
+    
+    /* مجموع */
+    .order-total {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 0;
+        margin-top: 20px;
+        border-top: 2px solid #e9ecef;
+        font-size: 20px;
+        font-weight: 700;
+    }
+    
+    .total-label {
+        color: #2d3748;
+    }
+    
+    .total-amount {
+        color: #28a745;
+    }
+    
+    /* روش پرداخت */
+    .payment-method {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+    
+    .payment-radio {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .payment-radio input[type="radio"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+    
+    .payment-label {
+        font-weight: 600;
+        color: #2d3748;
+        cursor: pointer;
+    }
+    
+    .zarinpal-logo {
+        background: white;
+        padding: 10px 15px;
+        border-radius: 6px;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        color: #6c757d;
+    }
+    
+    /* دکمه ثبت */
+    .submit-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 16px 40px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 700;
+        width: 100%;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 20px;
+    }
+    
+    .submit-btn:hover {
+        background: linear-gradient(135deg, #5568d3 0%, #6543a5 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    
+    /* Alert */
+    .alert {
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: none;
+    }
+    
+    .alert-danger {
+        background: #fee;
+        color: #dc3545;
+    }
+    
+    .alert-info {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .order-steps {
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .order-step {
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+        
+        .step-number {
+            margin-bottom: 0;
+            margin-left: 15px;
+        }
+        
+        .order-summary {
+            position: relative;
+            top: 0;
+            margin-top: 30px;
+        }
+        
+        .form-card {
+            padding: 20px;
+        }
+    }
+</style>
 
-        {% translate 'Order' as header_name %}
-        {% include 'topheader.html' with header_name=header_name %}
-
-        <div class="page-content-inner pb-5">
-            <div class="container">
-                <div class="row pt--50 pt-md--40 pt-sm--20">
-    <!--                        <div class="col-12">-->
-    <!--                            &lt;!&ndash; User Action Start &ndash;&gt;-->
-    <!--                            <div class="user-actions user-actions__coupon">-->
-    <!--                                <div class="message-box mb&#45;&#45;30">-->
-    <!--                                    <p><i class="fa fa-exclamation-circle"></i> کد تخفیف دارید؟ <a class="expand-btn" href="#coupon_info">برای وارد کردن کد تخفیف اینجا کلیک کنید</a></p>-->
-    <!--                                </div>-->
-    <!--                                <div id="coupon_info" class="user-actions__form hide-in-default">-->
-    <!--                                    <form action="#" class="form">-->
-    <!--                                        <p>اگر کد تخفیف دارید در باکس زیر وارد کنید.</p>-->
-    <!--                                        <div class="form__group d-sm-flex">-->
-    <!--                                            <input type="text" name="coupon" id="coupon" class="form__input form__input&#45;&#45;2 mr&#45;&#45;20 mr-xs&#45;&#45;0" placeholder="کد تخفیف">-->
-    <!--                                            <button type="submit" class="btn btn-small btn-bg-red btn-color-white btn-hover-2">اعمال</button>-->
-    <!--                                        </div>-->
-    <!--                                    </form>-->
-    <!--                                </div>-->
-    <!--                            </div>-->
-    <!--                            &lt;!&ndash; User Action End &ndash;&gt;-->
-    <!--                        </div>-->
+<div class="order-container">
+    <div class="container">
+        <!-- هدر صفحه -->
+        <div class="order-header">
+            <h1>
+                <i class="fas fa-shopping-bag"></i>
+                تکمیل سفارش
+            </h1>
+            
+            <!-- مراحل سفارش -->
+            <div class="order-steps">
+                <div class="order-step">
+                    <div class="step-number">✓</div>
+                    <div class="step-label">سبد خرید</div>
                 </div>
-                <div class="row">
-                    <!-- Checkout Area Start -->
-                    <div class="col-lg-6">
-                        <div class="checkout-title mt--10">
-                            <h2>جزئیات سفارش</h2>
+                <div class="order-step">
+                    <div class="step-number active">2</div>
+                    <div class="step-label">ثبت اطلاعات</div>
+                </div>
+                <div class="order-step">
+                    <div class="step-number">3</div>
+                    <div class="step-label">پرداخت</div>
+                </div>
+                <div class="order-step">
+                    <div class="step-number">4</div>
+                    <div class="step-label">تکمیل</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!-- فرم اطلاعات -->
+            <div class="col-lg-7 mb-4">
+                <div class="form-card">
+                    <h2 class="form-card-title">
+                        <i class="fas fa-user-edit"></i>
+                        جزئیات سفارش
+                    </h2>
+                    
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        
+                        {% if form.errors %}
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-circle"></i>
+                                لطفاً خطاهای فرم را اصلاح کنید.
+                            </div>
+                        {% endif %}
+                        
+                        <!-- نام و نام خانوادگی -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        نام <span class="required">*</span>
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        name="{{ form.first_name.name }}" 
+                                        class="form-input"
+                                        placeholder="نام خود را وارد کنید"
+                                        required
+                                    >
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        نام خانوادگی <span class="required">*</span>
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        name="{{ form.last_name.name }}" 
+                                        class="form-input"
+                                        placeholder="نام خانوادگی خود را وارد کنید"
+                                        required
+                                    >
+                                </div>
+                            </div>
                         </div>
-                        <div class="checkout-form">
-                            <form action="" method="POST" class="form form--checkout">
-                                {% csrf_token %}
-                                {% if form.errors %}
-                                    <div class="alert alert-danger">
-                                        {{ form.errors }}
-                                    </div>
-                                {% endif %}
-                                <div class="form-row mb--20">
-                                    <div class="form__group col-md-6 mb-sm--30">
-                                        <label for="billing_fname" class="form__label form__label--2">نام  <span class="required">*</span></label>
-                                        <input type="text" name="{{ form.first_name.name }}" id="billing_fname" class="form__input form__input--2">
-                                    </div>
-                                    <div class="form__group col-md-6">
-                                        <label for="billing_lname" class="form__label form__label--2">نام خانوادگی  <span class="required">*</span></label>
-                                        <input type="text" name="{{ form.last_name.name }}" id="billing_lname" class="form__input form__input--2">
-                                    </div>
-                                </div>
-                                <div class="form-row mb--20">
-                                    <div class="form__group col-12">
-                                        <label for="billing_address" class="form__label form__label--2">آدرس</label>
-                                        <input type="text" name="{{ form.address.name }}" id="billing_address" class="form__input form__input--2">
-                                    </div>
-                                </div>
-                                <div class="form-row mb--20">
-                                    <div class="form__group col-12">
-                                        <label for="billing_phone" class="form__label form__label--2">شماره همراه <span class="required">*</span></label>
-                                        <input type="text" name="{{ form.phone_number.name }}" id="billing_phone" class="form__input form__input--2">
-                                    </div>
-                                </div>
-                                <div class="form-row">
-                                    <div class="form__group col-12">
-                                        <label for="orderNotes" class="form__label form__label--2">یادداشت شما</label>
-                                        <textarea class="form__input form__input--2 form__input--textarea" id="orderNotes" name="{{ form.order_notes.name }}" placeholder="اگر یادداشتی دارید در اینجا وارد کنید. در غیر این صورت این مکان را خالی بگذارید"></textarea>
-                                    </div>
-                                </div>
-                                <button class="btn" type="submit">{% translate 'Submit' %}</button>
-                            </form>
-
+                        
+                        <!-- آدرس -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-map-marker-alt"></i>
+                                آدرس کامل <span class="required">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                name="{{ form.address.name }}" 
+                                class="form-input"
+                                placeholder="آدرس کامل پستی خود را وارد کنید"
+                                required
+                            >
                         </div>
+                        
+                        <!-- شماره تماس -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-phone"></i>
+                                شماره تماس <span class="required">*</span>
+                            </label>
+                            <input 
+                                type="tel" 
+                                name="{{ form.phone_number.name }}" 
+                                class="form-input"
+                                placeholder="09123456789"
+                                pattern="[0-9]{11}"
+                                required
+                            >
+                            <small style="color: #6c757d; font-size: 12px; display: block; margin-top: 5px;">
+                                <i class="fas fa-info-circle"></i>
+                                شماره تماس باید ۱۱ رقم باشد
+                            </small>
+                        </div>
+                        
+                        <!-- یادداشت سفارش -->
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-sticky-note"></i>
+                                یادداشت سفارش (اختیاری)
+                            </label>
+                            <textarea 
+                                name="{{ form.order_notes.name }}" 
+                                class="form-input"
+                                placeholder="در صورت نیاز، توضیحات یا درخواست خاصی را اینجا بنویسید..."
+                            ></textarea>
+                        </div>
+                        
+                        <!-- دکمه ثبت -->
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-check-circle"></i>
+                            ثبت و ادامه به پرداخت
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- خلاصه سفارش -->
+            <div class="col-lg-5">
+                <div class="order-summary">
+                    <h2 class="summary-title">
+                        <i class="fas fa-receipt"></i>
+                        خلاصه سفارش
+                    </h2>
+                    
+                    <!-- لیست محصولات -->
+                    <div class="order-items">
+                        {% for item in cart %}
+                            <div class="order-item">
+                                <div class="item-info">
+                                    <div class="item-title">{{ item.product_obj.title }}</div>
+                                    <div class="item-quantity">
+                                        <i class="fas fa-times"></i>
+                                        {{ item.quantity }} عدد
+                                    </div>
+                                </div>
+                                <div class="item-price">
+                                    {{ item.total_price|intcomma }} تومان
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div style="text-align: center; padding: 40px 20px; color: #6c757d;">
+                                <i class="fas fa-shopping-cart" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i>
+                                <p>سبد خرید خالی است!</p>
+                            </div>
+                        {% endfor %}
                     </div>
-                    <div class="col-xl-5 offset-xl-1 col-lg-6 mt-md--40">
-                        <div class="order-details">
-                            <div class="checkout-title mt--10">
-                                <h2>سفارش شما</h2>
+                    
+                    {% if cart %}
+                        <!-- مجموع -->
+                        <div class="order-total">
+                            <span class="total-label">مبلغ قابل پرداخت:</span>
+                            <span class="total-amount">{{ cart.get_total_price|intcomma }} تومان</span>
+                        </div>
+                        
+                        <!-- روش پرداخت -->
+                        <div class="payment-method">
+                            <div class="payment-radio">
+                                <input type="radio" id="zarinpal" name="payment" checked>
+                                <label class="payment-label" for="zarinpal">
+                                    <i class="fas fa-credit-card"></i>
+                                    پرداخت آنلاین
+                                </label>
                             </div>
-                            <div class="table-content table-responsive mb--30">
-                                <table class="table order-table order-table-2">
-                                    <thead>
-                                        <tr>
-                                            <th>محصول</th>
-                                            <th class="text-right">قیمت نهایی</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for item in cart %}
-                                            <tr>
-                                                <th>{{ item.product_obj.title }}
-                                                     <strong><span>&#10005;</span> {{ item.quantity|translate_number }}</strong>
-                                                </th>
-                                                <td class="text-right">{{ item.product_obj.price|intcomma:False|translate_number }} {% translate '$' %}</td>
-                                            </tr>
-                                        {% endfor %}
-
-                                    </tbody>
-                                    <tfoot>
-                                        <tr class="cart-subtotal">
-                                            <th>مجموع</th>
-                                            <td class="text-right">{{ cart.get_total_price|intcomma:False|translate_number }} {% translate '$' %}</td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                            <div class="checkout-payment">
-                                <h2 class="py-5">روش پرداخت</h2>
-                                <form action="#" class="payment-form">
-                                    <div class="payment-group mb--10">
-                                        <div class="payment-radio">
-                                            <input type="radio" value="bank" name="payment-method" id="bank" checked>
-                                            <label class="payment-label" for="cheque">درگاه آنلاین زرین پال</label>
-                                        </div>
-                                    </div>
-                                </form>
+                            <div class="zarinpal-logo">
+                                <i class="fas fa-shield-alt" style="color: #28a745;"></i>
+                                پرداخت امن از طریق درگاه زرین‌پال
                             </div>
                         </div>
-                    </div>
-                    <!-- Checkout Area End -->
+                        
+                        <!-- اطلاعات اضافی -->
+                        <div class="alert alert-info" style="margin-top: 20px; font-size: 13px;">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>توجه:</strong> بعد از تکمیل فرم، به درگاه پرداخت منتقل خواهید شد.
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    {% include 'cart/cart_sidebar.html' %}
+<script>
+// اعتبارسنجی شماره تلفن
+document.querySelector('input[type="tel"]')?.addEventListener('input', function(e) {
+    // فقط اعداد
+    this.value = this.value.replace(/[^0-9]/g, '');
+    
+    // حداکثر 11 رقم
+    if (this.value.length > 11) {
+        this.value = this.value.slice(0, 11);
+    }
+});
 
-    <!-- Main Content Wrapper Start -->
+// اعتبارسنجی فرم
+document.querySelector('form')?.addEventListener('submit', function(e) {
+    const phone = document.querySelector('input[type="tel"]').value;
+    
+    if (phone.length !== 11) {
+        e.preventDefault();
+        alert('شماره تماس باید ۱۱ رقم باشد');
+        return false;
+    }
+    
+    if (!phone.startsWith('09')) {
+        e.preventDefault();
+        alert('شماره تماس باید با 09 شروع شود');
+        return false;
+    }
+});
+
+// نمایش پیام تایید قبل از ثبت
+document.querySelector('.submit-btn')?.addEventListener('click', function(e) {
+    const form = this.closest('form');
+    if (form.checkValidity()) {
+        // فرم معتبر است
+        console.log('در حال ثبت سفارش...');
+    }
+});
+</script>
+
 {% endblock %}

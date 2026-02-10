@@ -1,81 +1,400 @@
+
+{% extends '_base.html' %}
 {% load static %}
+{% load i18n %}
 {% load humanize %}
 
-<table class="table table-bordered text-center">
-    <thead>
-        <tr>
-            <th class="product-remove">حذف</th>
-            <th class="product-thumbnail">تصویر</th>
-            <th class="product-name">محصول</th>
-            <th class="product-price">قیمت</th>
-            <th class="product-quantity">تعداد</th>
-            <th class="product-subtotal">جمع</th>
-        </tr>
-    </thead>
+{% block page_title %}سبد خرید | فروشگاه{% endblock %}
 
-    <tbody>
-        {% for item in cart %}
-            <tr>
+{% block content %}
+<style>
+    /* استایل‌های inline برای صفحه cart */
+    .cart-container {
+        background: #f8f9fa;
+        min-height: 100vh;
+        padding: 40px 0;
+        direction: rtl;
+    }
+    
+    .cart-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        padding: 30px;
+        margin-bottom: 20px;
+    }
+    
+    .cart-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px 30px;
+        border-radius: 12px 12px 0 0;
+        margin: -30px -30px 30px -30px;
+    }
+    
+    .cart-table {
+        width: 100%;
+        margin-bottom: 0;
+    }
+    
+    .cart-table thead th {
+        background: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+        padding: 15px;
+        font-weight: 600;
+        text-align: center;
+        color: #495057;
+    }
+    
+    .cart-table tbody td {
+        padding: 20px 15px;
+        vertical-align: middle;
+        text-align: center;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .product-img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+    }
+    
+    .product-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #2d3748;
+        text-decoration: none;
+        margin: 0;
+    }
+    
+    .product-title:hover {
+        color: #667eea;
+    }
+    
+    .price-text {
+        font-size: 18px;
+        font-weight: 700;
+        color: #28a745;
+    }
+    
+    .quantity-badge {
+        background: #e3f2fd;
+        color: #1976d2;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-weight: 600;
+        display: inline-block;
+    }
+    
+    .total-price {
+        font-size: 20px;
+        font-weight: 700;
+        color: #28a745;
+    }
+    
+    .remove-btn {
+        color: #dc3545;
+        font-size: 20px;
+        transition: all 0.3s;
+        text-decoration: none;
+    }
+    
+    .remove-btn:hover {
+        color: #c82333;
+        transform: scale(1.2);
+    }
+    
+    .summary-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        padding: 30px;
+        position: sticky;
+        top: 20px;
+    }
+    
+    .summary-header {
+        font-size: 20px;
+        font-weight: 700;
+        color: #2d3748;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #e9ecef;
+    }
+    
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #f1f3f5;
+    }
+    
+    .summary-total {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 0;
+        font-size: 24px;
+        font-weight: 700;
+        color: #28a745;
+        border-top: 2px solid #e9ecef;
+        margin-top: 10px;
+    }
+    
+    .btn-checkout {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 600;
+        width: 100%;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+    
+    .btn-checkout:hover {
+        background: linear-gradient(135deg, #5568d3 0%, #6543a5 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-clear {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+    
+    .btn-clear:hover {
+        background: #c82333;
+        color: white;
+    }
+    
+    .btn-continue {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+    }
+    
+    .btn-continue:hover {
+        background: #5a6268;
+        color: white;
+    }
+    
+    .empty-cart {
+        text-align: center;
+        padding: 60px 20px;
+    }
+    
+    .empty-cart-icon {
+        font-size: 80px;
+        color: #dee2e6;
+        margin-bottom: 20px;
+    }
+    
+    .empty-cart-text {
+        font-size: 24px;
+        color: #6c757d;
+        margin-bottom: 30px;
+    }
+    
+    @media (max-width: 768px) {
+        .cart-table {
+            font-size: 14px;
+        }
+        
+        .product-img {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .cart-card {
+            padding: 20px;
+        }
+        
+        .summary-card {
+            position: relative;
+            top: 0;
+        }
+    }
+</style>
 
-                <!-- حذف محصول -->
-                <td class="product-remove text-left">
-                    <a href="{% url 'cart:cart_remove' item.product_obj.id %}">
-                        <i class="flaticon flaticon-cross"></i>
-                    </a>
-                </td>
-
-                <!-- تصویر محصول (اصلاح شده، بدون ارور) -->
-                <td class="product-thumbnail text-left">
-                    {% if item.product_obj.image %}
-                        <img
-                            src="{{ item.product_obj.image.url }}"
-                            alt="{{ item.product_obj.title }}"
-                            style="width:80px;height:80px;object-fit:cover;"
-                        >
+<div class="cart-container">
+    <div class="container">
+        <div class="row">
+            <!-- سبد خرید -->
+            <div class="col-lg-8 mb-4">
+                <div class="cart-card">
+                    <div class="cart-header">
+                        <h2 style="margin: 0;">
+                            🛒 سبد خرید شما
+                        </h2>
+                    </div>
+                    
+                    {% if cart %}
+                        <div class="table-responsive">
+                            <table class="cart-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 80px;">حذف</th>
+                                        <th style="width: 100px;">تصویر</th>
+                                        <th>محصول</th>
+                                        <th style="width: 150px;">قیمت واحد</th>
+                                        <th style="width: 100px;">تعداد</th>
+                                        <th style="width: 150px;">جمع کل</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in cart %}
+                                        <tr>
+                                            <!-- حذف -->
+                                            <td>
+                                                <a href="{% url 'cart:cart_remove' item.product_obj.id %}" class="remove-btn" title="حذف از سبد">
+                                                    ✕
+                                                </a>
+                                            </td>
+                                            
+                                            <!-- تصویر -->
+                                            <td>
+                                                {% if item.product_obj.image %}
+                                                    <img src="{{ item.product_obj.image.url }}" alt="{{ item.product_obj.title }}" class="product-img">
+                                                {% else %}
+                                                    <div style="width: 80px; height: 80px; background: #e9ecef; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #adb5bd;">
+                                                        📦
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+                                            
+                                            <!-- نام محصول -->
+                                            <td style="text-align: right;">
+                                                <a href="{{ item.product_obj.get_absolute_url }}" class="product-title">
+                                                    {{ item.product_obj.title }}
+                                                </a>
+                                            </td>
+                                            
+                                            <!-- قیمت واحد -->
+                                            <td>
+                                                <span class="price-text">
+                                                    {{ item.price|intcomma }}
+                                                </span>
+                                                <small style="display: block; color: #6c757d;">تومان</small>
+                                            </td>
+                                            
+                                            <!-- تعداد -->
+                                            <td>
+                                                <span class="quantity-badge">
+                                                    {{ item.quantity }}
+                                                </span>
+                                            </td>
+                                            
+                                            <!-- جمع -->
+                                            <td>
+                                                <span class="total-price">
+                                                    {{ item.total_price|intcomma }}
+                                                </span>
+                                                <small style="display: block; color: #6c757d;">تومان</small>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- دکمه‌های پایین -->
+                        <div style="display: flex; justify-content: space-between; margin-top: 30px; flex-wrap: wrap; gap: 15px;">
+                            <a href="{% url 'product_list' %}" class="btn-continue">
+                                ← ادامه خرید
+                            </a>
+                            
+                            <form action="{% url 'cart:cart_clear' %}" method="POST" style="margin: 0;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-clear" onclick="return confirm('آیا مطمئن هستید که می‌خواهید سبد خرید را خالی کنید؟')">
+                                    🗑️ خالی کردن سبد
+                                </button>
+                            </form>
+                        </div>
                     {% else %}
-                        <img
-                            src="{% static 'images/no-image.png' %}"
-                            alt="بدون تصویر"
-                            style="width:80px;height:80px;object-fit:cover;opacity:.6;"
-                        >
+                        <!-- سبد خالی -->
+                        <div class="empty-cart">
+                            <div class="empty-cart-icon">🛒</div>
+                            <p class="empty-cart-text">سبد خرید شما خالی است!</p>
+                            <a href="{% url 'product_list' %}" class="btn-checkout" style="max-width: 300px; margin: 0 auto;">
+                                مشاهده محصولات
+                            </a>
+                        </div>
                     {% endif %}
-                </td>
-
-                <!-- نام محصول -->
-                <td class="product-name text-left">
-                    <h3>
-                        <a href="{{ item.product_obj.get_absolute_url }}">
-                            {{ item.product_obj.title }}
+                </div>
+            </div>
+            
+            <!-- خلاصه سفارش -->
+            <div class="col-lg-4">
+                {% if cart %}
+                    <div class="summary-card">
+                        <h3 class="summary-header">
+                            📋 خلاصه سفارش
+                        </h3>
+                        
+                        <div class="summary-row">
+                            <span style="color: #6c757d;">تعداد آیتم‌ها:</span>
+                            <span style="font-weight: 600;">{{ cart|length }} عدد</span>
+                        </div>
+                        
+                        <div class="summary-row">
+                            <span style="color: #6c757d;">مبلغ کل محصولات:</span>
+                            <span style="font-weight: 600;">{{ cart.get_total_price|intcomma }} تومان</span>
+                        </div>
+                        
+                        <div class="summary-row">
+                            <span style="color: #6c757d;">هزینه ارسال:</span>
+                            <span style="font-weight: 600; color: #28a745;">رایگان</span>
+                        </div>
+                        
+                        <div class="summary-total">
+                            <span>مبلغ قابل پرداخت:</span>
+                            <span>{{ cart.get_total_price|intcomma }} تومان</span>
+                        </div>
+                        
+                        <a href="{% url 'order_create' %}" class="btn-checkout">
+                            ادامه و تکمیل سفارش →
                         </a>
-                    </h3>
-                </td>
+                        
+                        <!-- اطلاعات اضافی -->
+                        <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; font-size: 14px; color: #6c757d;">
+                            <p style="margin: 0 0 10px 0;">✓ ارسال رایگان برای سفارش‌های بالای 500 هزار تومان</p>
+                            <p style="margin: 0 0 10px 0;">✓ پرداخت امن با درگاه زرین‌پال</p>
+                            <p style="margin: 0;">✓ گارانتی اصالت و سلامت کالا</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 
-                <!-- قیمت واحد -->
-                <td class="product-price">
-                    <span class="product-price-wrapper">
-                        {{ item.price|intcomma }} تومان
-                    </span>
-                </td>
+<script>
+// انیمیشن ساده برای حذف
+document.querySelectorAll('.remove-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        if (!confirm('آیا مطمئن هستید که می‌خواهید این محصول را حذف کنید؟')) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
 
-                <!-- تعداد -->
-                <td class="product-quantity">
-                    {{ item.quantity }}
-                </td>
-
-                <!-- جمع کل -->
-                <td class="product-subtotal">
-                    <span class="subtotal">
-                        {{ item.total_price|intcomma }} تومان
-                    </span>
-                </td>
-
-            </tr>
-        {% empty %}
-            <tr>
-                <td colspan="6" style="padding: 30px; color: #999;">
-                    سبد خرید شما خالی است 🛒
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+{% endblock %}

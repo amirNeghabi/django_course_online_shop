@@ -64,6 +64,7 @@ class Cart:
             cart[str(product.id)]['product_obj'] = product
 
         for item in cart.values():
+            item['price'] = item['product_obj'].price
             item['total_price'] = item['product_obj'].price * item['quantity']
             yield item
 
@@ -76,11 +77,17 @@ class Cart:
 
     def get_total_price(self):
         product_ids = self.cart.keys()
-
-        return sum(item['quantity'] * item['product_obj'].price for item in self.cart.values())
+        products = Product.objects.filter(id__in=product_ids)
+        
+        total = 0
+        for product in products:
+            product_id = str(product.id)
+            if product_id in self.cart:
+                total += self.cart[product_id]['quantity'] * product.price
+        
+        return total
 
     def is_empty(self):
         if self.cart:
             return False
         return True
-
