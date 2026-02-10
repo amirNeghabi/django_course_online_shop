@@ -1,485 +1,774 @@
 {% extends '_base.html' %}
+{% load static %}
+{% load humanize %}
 
-{% block page_title %}DigiShop | Home{% endblock %}
+{% block page_title %}فروشگاه دیجیتال - خرید محصولات دیجیتال با بهترین قیمت{% endblock %}
 
 {% block content %}
-<!-- Poppins font -->
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vazir:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --primary: #6610f2;      /* deep purple */
-  --primary-2: #0d6efd;    /* blue */
-  --accent: #ffb84d;       /* saffron-like accent */
-  --bg: linear-gradient(135deg, rgba(102,16,242,0.95), rgba(13,110,253,0.95));
-  --glass: rgba(255,255,255,0.08);
-  --card-bg: #ffffff;
-  --muted: #6b7280;
-  --radius-lg: 20px;
+:root {
+    --primary: #667eea;
+    --primary-dark: #764ba2;
+    --accent: #48bb78;
+    --danger: #f56565;
+    --warning: #ed8936;
+    --bg-light: #f8f9fa;
+    --text-dark: #2d3748;
+    --text-muted: #718096;
+    --border: #e2e8f0;
 }
 
-/* Reset for this block only */
-.home-root{ direction: rtl; font-family: 'Poppins', sans-serif; color: #0f1724; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-/* Layout */
+.home-wrapper {
+    font-family: 'Vazir', -apple-system, sans-serif;
+    direction: rtl;
+    background: #ffffff;
+}
+
+/* ========== Hero Section ========== */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 80px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    right: -5%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-content h1 {
+    font-size: 52px;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.hero-content p {
+    font-size: 18px;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    opacity: 0.95;
+}
+
+.hero-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 40px;
+}
+
+.hero-stat {
+    text-align: center;
+}
+
+.hero-stat-number {
+    font-size: 36px;
+    font-weight: 900;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.hero-stat-label {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.btn-primary {
+    background: white;
+    color: var(--primary);
+    padding: 16px 32px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+
+.btn-secondary {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    padding: 16px 32px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+.hero-image {
+    position: relative;
+}
+
+.hero-image img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    filter: drop-shadow(0 20px 60px rgba(0,0,0,0.3));
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+/* ========== Search Bar ========== */
+.search-section {
+    background: white;
+    padding: 40px 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.search-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.search-box {
+    display: flex;
+    background: var(--bg-light);
+    border-radius: 16px;
+    padding: 8px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.search-box:focus-within {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.search-box input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 16px 20px;
+    font-size: 16px;
+    outline: none;
+    font-family: 'Vazir';
+}
+
+.search-box button {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    border: none;
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.search-box button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+/* ========== Features ========== */
+.features-section {
+    padding: 80px 20px;
+    background: var(--bg-light);
+}
+
 .container {
-  max-width: 1200px;
-  margin: 28px auto;
-  padding: 0 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-/* Hero */
-.hero-wrap{
-  background: var(--bg);
-  color: #fff;
-  border-radius: var(--radius-lg);
-  padding: 48px;
-  display:flex;
-  gap: 32px;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 30px 60px rgba(16,24,40,0.18);
+.section-title {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--text-dark);
+    margin-bottom: 50px;
 }
 
-/* decorative blobs (SVG shapes as background) */
-.hero-wrap::before{
-  content: "";
-  position: absolute;
-  inset: -20% -10% auto auto;
-  width: 520px;
-  height: 520px;
-  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.08), transparent 35%),
-              radial-gradient(circle at 70% 70%, rgba(255,255,255,0.03), transparent 40%);
-  transform: rotate(18deg);
-  filter: blur(18px);
-  pointer-events: none;
-  z-index: 0;
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
 }
 
-/* left text */
-.hero-text{
-  flex: 1;
-  z-index: 1;
-  max-width: 640px;
-  text-align: right;
-}
-.brand {
-  display:inline-block;
-  font-weight:800;
-  font-size:20px;
-  letter-spacing: .6px;
-  background: linear-gradient(90deg, #fff, rgba(255,255,255,0.8));
-  -webkit-background-clip: text;
-  color: transparent;
-}
-.hero-title {
-  font-size: 48px;
-  font-weight: 800;
-  margin: 8px 0 12px;
-  line-height: 1.02;
-}
-.hero-desc {
-  font-size: 17px;
-  color: rgba(255,255,255,0.92);
-  margin-bottom: 18px;
+.feature-card {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
 }
 
-/* search / quick actions */
-.hero-actions {
-  display:flex;
-  gap: 14px;
-  align-items: center;
-  margin-top: 12px;
-  flex-wrap:wrap;
-}
-.search {
-  display:flex;
-  align-items:center;
-  background: rgba(255,255,255,0.12);
-  backdrop-filter: blur(6px);
-  border-radius: 12px;
-  padding: 8px;
-  flex: 1 1 360px;
-  min-width: 180px;
-}
-.search input{
-  flex:1;
-  background: transparent;
-  border: none;
-  padding: 10px 12px;
-  color: #fff;
-  outline: none;
-  font-size: 15px;
-}
-.search button{
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(90deg, rgba(255,255,255,0.12), rgba(255,255,255,0.08));
-  color: #fff;
-  padding: 10px 14px;
-  cursor: pointer;
-  display:flex;
-  gap:8px;
-  align-items:center;
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
 }
 
-/* CTA button */
-.btn-cta{
-  padding: 12px 20px;
-  border-radius: 12px;
-  background: linear-gradient(90deg, var(--accent), #ff8a00);
-  color: #111;
-  font-weight:700;
-  text-decoration: none;
-  box-shadow: 0 10px 22px rgba(255,184,77,0.18);
+.feature-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
 }
 
-/* hero-right: animated placeholder for image/GIF/Lottie */
-.hero-media {
-  width: 460px;
-  min-width: 240px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index: 1;
-}
-.media-card{
-  width: 420px;
-  max-width: 92%;
-  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-  border-radius: 18px;
-  padding: 14px;
-  box-shadow: 0 12px 30px rgba(2,6,23,0.35);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.06);
-}
-/* placeholder instructions (will be replaced by your animation later) */
-.media-card .placeholder{
-  width:100%;
-  height:260px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  color: rgba(255,255,255,0.9);
-  font-weight:600;
-  text-align:center;
-  padding: 10px;
-  font-size: 14px;
+.feature-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 10px;
 }
 
-/* Features (cards) */
-.features{
-  display:grid;
-  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-  gap: 22px;
-  margin-top: 28px;
-}
-.feature-card{
-  background: var(--card-bg);
-  padding: 18px;
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(2,6,23,0.06);
-  display:flex;
-  gap:12px;
-  align-items:center;
-  transition: transform .28s ease, box-shadow .28s ease;
-}
-.feature-card:hover{ transform: translateY(-8px); box-shadow: 0 20px 45px rgba(2,6,23,0.08); }
-.feature-icon{
-  width:58px;
-  height:58px;
-  border-radius:12px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:22px;
-  color: var(--primary);
-  background: linear-gradient(180deg, rgba(102,16,242,0.06), rgba(13,110,253,0.03));
+.feature-desc {
+    color: var(--text-muted);
+    line-height: 1.6;
 }
 
-/* Product strip (carousel) */
-.products-strip{
-  margin-top: 34px;
-  border-radius: 16px;
-  padding: 16px;
-  background: linear-gradient(180deg,#fff,#f7f9ff);
-  box-shadow: 0 18px 40px rgba(2,6,23,0.04);
+/* ========== Products Section ========== */
+.products-section {
+    padding: 80px 20px;
+    background: white;
 }
-.strip-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-.strip-title{ font-weight:700; font-size:18px; }
-.strip-controls{ display:flex; gap:8px; align-items:center; }
-.strip-controls button{
-  border:none; background:transparent; font-size:20px; cursor:pointer; padding:8px 10px; border-radius:8px;
-}
-.carousel{
-  display:flex;
-  gap:14px;
-  overflow:hidden;
-  scroll-behavior: smooth;
-  padding-bottom:6px;
-}
-.product-card{
-  min-width: 220px;
-  max-width: 220px;
-  background: white;
-  border-radius: 14px;
-  padding: 12px;
-  box-shadow: 0 10px 30px rgba(2,6,23,0.06);
-  transition: transform .22s ease, box-shadow .22s ease;
-  text-align: right;
-}
-.product-card:hover{ transform: translateY(-8px); box-shadow: 0 22px 44px rgba(2,6,23,0.08); }
-.product-thumb{
-  width:100%;
-  height:140px;
-  border-radius:10px;
-  object-fit:cover;
-  margin-bottom:10px;
-  background:#f2f4f8;
-}
-.product-title{ font-weight:700; font-size:14px; margin-bottom:6px; color:#111827; }
-.product-price{ color: var(--primary-2); font-weight:700; }
 
-/* Testimonials */
-.testimonials{ margin-top: 36px; display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap:18px; }
-.testimonial{ background:#fff; padding:20px; border-radius:14px; box-shadow: 0 10px 30px rgba(2,6,23,0.04); }
-.testimonial p{ color:var(--muted); line-height:1.6; margin-bottom:8px; }
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
 
-/* CTA banner */
-.footer-cta{ margin-top: 44px; padding: 34px; background: linear-gradient(90deg,#fff,#fbfbff); border-radius:18px; text-align:center; box-shadow: 0 10px 30px rgba(2,6,23,0.04); }
-.footer-cta .title { font-weight:800; font-size:22px; margin-bottom:8px; }
-.footer-cta .sub { color:var(--muted); margin-bottom:14px; }
+.view-all-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
 
-/* responsive behavior */
-@media (max-width: 1000px){ .hero{ padding:28px; } .hero-title{ font-size:36px; } .hero-media{ display:block; } }
-@media (max-width: 720px){
-  .hero{ flex-direction: column-reverse; gap:18px; padding:20px; }
-  .hero-media { width:100%; }
-  .media-card .placeholder{ height:220px; }
-  .product-card { min-width:180px; max-width:180px; }
+.view-all-link:hover {
+    gap: 12px;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.product-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.12);
+}
+
+.product-image {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    background: var(--bg-light);
+}
+
+.product-info {
+    padding: 20px;
+}
+
+.product-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.product-price {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+.product-price span {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.product-status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.product-status.available {
+    background: rgba(72, 187, 120, 0.1);
+    color: var(--accent);
+}
+
+.product-status.unavailable {
+    background: rgba(245, 101, 101, 0.1);
+    color: var(--danger);
+}
+
+/* ========== Categories ========== */
+.categories-section {
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.category-card {
+    background: white;
+    padding: 30px 20px;
+    border-radius: 16px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text-dark);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+}
+
+.category-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.category-name {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+/* ========== Testimonials ========== */
+.testimonials-section {
+    padding: 80px 20px;
+    background: white;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.testimonial-card {
+    background: var(--bg-light);
+    padding: 30px;
+    border-radius: 20px;
+    border-right: 4px solid var(--primary);
+}
+
+.testimonial-text {
+    color: var(--text-dark);
+    line-height: 1.8;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.author-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.author-info h4 {
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 3px;
+}
+
+.author-info p {
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+/* ========== CTA Section ========== */
+.cta-section {
+    padding: 100px 20px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    text-align: center;
+}
+
+.cta-section h2 {
+    font-size: 42px;
+    font-weight: 900;
+    margin-bottom: 20px;
+}
+
+.cta-section p {
+    font-size: 18px;
+    margin-bottom: 40px;
+    opacity: 0.95;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+    .hero-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        text-align: center;
+    }
+    
+    .hero-content h1 {
+        font-size: 36px;
+    }
+    
+    .hero-stats {
+        justify-content: center;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+    }
+    
+    .section-title {
+        font-size: 28px;
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+/* ========== Empty State ========== */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+}
+
+.empty-state-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.empty-state h3 {
+    font-size: 24px;
+    color: var(--text-dark);
+    margin-bottom: 10px;
 }
 </style>
 
-<div class="home-root">
-  <div class="container">
-    <!-- HERO -->
-    <section class="hero-wrap" role="region" aria-label="Hero">
-      <div class="hero-text">
-        <div class="brand">DigiShop</div>
-        <h1 class="hero-title">خرید هوشمند. سریع. امن.</h1>
-        <p class="hero-desc">محصولات دیجیتال و لوازم جانبی با بهترین قیمت‌ها، ارسال سریع و پشتیبانی ۲۴/۷. تجربه‌ای نو از خرید آنلاین در DigiShop.</p>
-
-        <div class="hero-actions" aria-hidden="false">
-          <div class="search" role="search" aria-label="Search products">
-            <input id="searchInput" type="search" placeholder="جستجو برای محصول، برند یا دسته..." aria-label="search">
-            <button id="searchBtn" aria-label="Search button">
-              <!-- simple magnifier icon -->
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M21 21l-4.35-4.35" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="11" cy="11" r="6" stroke="#fff" stroke-width="1.6"/>
-              </svg>
-            </button>
-          </div>
-
-          <a class="btn-cta" href="/products/" role="button">مشاهده محصولات</a>
-        </div>
-
-        <!-- quick feature list below hero on mobile -->
-        <div class="features" style="margin-top:18px;">
-          <div class="feature-card" role="article">
-            <div class="feature-icon">⚡</div>
-            <div>
-              <div style="font-weight:700">ارسال فوری</div>
-              <div style="color:var(--muted); font-size:13px">تحویل در کوتاه‌ترین زمان ممکن</div>
+<div class="home-wrapper">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>خرید هوشمند محصولات دیجیتال 🚀</h1>
+                <p>بهترین محصولات دیجیتال با قیمت مناسب، ارسال سریع و پشتیبانی ۲۴ ساعته. تجربه‌ای متفاوت از خرید آنلاین!</p>
+                
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <span class="hero-stat-number">{{ total_products|default:"0" }}</span>
+                        <span class="hero-stat-label">محصول</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-number">{{ total_users|default:"0" }}</span>
+                        <span class="hero-stat-label">کاربر</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-number">{{ total_orders|default:"0" }}</span>
+                        <span class="hero-stat-label">سفارش</span>
+                    </div>
+                </div>
+                
+                <div class="hero-buttons">
+                    <a href="{% url 'product_list' %}" class="btn-primary">
+                        مشاهده محصولات
+                        <span>←</span>
+                    </a>
+                    <a href="#products" class="btn-secondary">پیشنهادات ویژه</a>
+                </div>
             </div>
-          </div>
-          <div class="feature-card" role="article">
-            <div class="feature-icon">🔐</div>
-            <div>
-              <div style="font-weight:700">پرداخت امن</div>
-              <div style="color:var(--muted); font-size:13px">درگاه‌های معتبر و ایمن</div>
+            
+            <div class="hero-image">
+                <svg width="500" height="400" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="50" y="50" width="400" height="300" rx="30" fill="white" opacity="0.1"/>
+                    <rect x="100" y="100" width="300" height="200" rx="20" fill="white" opacity="0.2"/>
+                    <circle cx="250" cy="200" r="60" fill="white" opacity="0.3"/>
+                    <text x="250" y="210" text-anchor="middle" fill="white" font-size="24" font-weight="bold">🛍️</text>
+                </svg>
             </div>
-          </div>
         </div>
-      </div>
-
-      <!-- HERO MEDIA -->
-      <div class="hero-media" aria-hidden="true">
-        <div class="media-card" id="mediaCard">
-          <!-- PLACEHOLDER: Replace this inner block with your GIF or Lottie animation.
-               e.g. put an <img src="YOUR_GIF_URL"> or a Lottie player here.
-               For now we show a polished illustrative SVG composition.
-          -->
-          <div class="placeholder" id="heroPlaceholder">
-            <!-- Inline SVG illustration (stylish shopping/box) -->
-            <svg width="320" height="220" viewBox="0 0 320 220" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Shopping illustration">
-              <defs>
-                <linearGradient id="g1" x1="0" x2="1">
-                  <stop offset="0" stop-color="#ffb84d"/>
-                  <stop offset="1" stop-color="#ff8a00"/>
-                </linearGradient>
-              </defs>
-              <rect x="10" y="40" width="300" height="140" rx="18" fill="url(#g1)" opacity="0.12"/>
-              <g transform="translate(40,40)">
-                <rect x="0" y="20" width="150" height="110" rx="12" fill="#fff" opacity="0.92"/>
-                <rect x="24" y="36" width="102" height="68" rx="8" fill="#f3f6ff"/>
-                <circle cx="30" cy="80" r="6" fill="#6610f2"/>
-                <rect x="168" y="2" width="72" height="62" rx="10" fill="#fff" opacity="0.95"/>
-                <rect x="180" y="14" width="40" height="36" rx="6" fill="#eef2ff"/>
-                <text x="12" y="16" fill="#111827" font-size="14" font-weight="700">DigiShop Preview</text>
-              </g>
-            </svg>
-          </div>
-        </div>
-      </div>
     </section>
 
-    <!-- PRODUCTS STRIP with simple carousel -->
-    <section class="products-strip" aria-label="Featured products">
-      <div class="strip-header">
-        <div class="strip-title">پیشنهاد ویژه</div>
-        <div class="strip-controls">
-          <button id="prevBtn" aria-label="Previous">‹</button>
-          <button id="nextBtn" aria-label="Next">›</button>
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="search-container">
+            <form method="GET" action="{% url 'product_list' %}">
+                <div class="search-box">
+                    <input type="text" name="q" placeholder="جستجوی محصول، برند یا دسته‌بندی..." aria-label="Search">
+                    <button type="submit">جستجو 🔍</button>
+                </div>
+            </form>
         </div>
-      </div>
-
-      <div class="carousel" id="carousel">
-        <!-- sample products (replace links/images with real product data later) -->
-        <div class="product-card" role="article">
-          <img class="product-thumb" src="https://images.unsplash.com/photo-1513709630908-2e1e04b8fe1a?&auto=format&fit=crop&w=600&q=60" alt="Product 1">
-          <div class="product-title">هدفون بی‌سیم مدل X1</div>
-          <div class="product-price">2,950,000 تومان</div>
-        </div>
-
-        <div class="product-card" role="article">
-          <img class="product-thumb" src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?&auto=format&fit=crop&w=600&q=60" alt="Product 2">
-          <div class="product-title">مودم روتر پرسرعت</div>
-          <div class="product-price">1,650,000 تومان</div>
-        </div>
-
-        <div class="product-card" role="article">
-          <img class="product-thumb" src="https://images.unsplash.com/photo-1526178615339-822b3f8e0b35?&auto=format&fit=crop&w=600&q=60" alt="Product 3">
-          <div class="product-title">اسپیکر قابل حمل</div>
-          <div class="product-price">890,000 تومان</div>
-        </div>
-
-        <div class="product-card" role="article">
-          <img class="product-thumb" src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?&auto=format&fit=crop&w=600&q=60" alt="Product 4">
-          <div class="product-title">کیت لوازم جانبی</div>
-          <div class="product-price">520,000 تومان</div>
-        </div>
-
-        <div class="product-card" role="article">
-          <img class="product-thumb" src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?&auto=format&fit=crop&w=600&q=60" alt="Product 5">
-          <div class="product-title">گیم‌پد حرفه‌ای</div>
-          <div class="product-price">1,250,000 تومان</div>
-        </div>
-      </div>
     </section>
 
-    <!-- Testimonials -->
-    <section class="testimonials" aria-label="Customer testimonials">
-      <div class="testimonial">
-        <p>خرید از DigiShop تجربه جدید و لذت‌بخشی بود. ارسال خیلی سریع و محصول دقیقاً مطابق عکس بود.</p>
-        <div style="font-weight:700; color:#111827"> — سارا، تهران</div>
-      </div>
-      <div class="testimonial">
-        <p>پشتیبانی دقیق و پاسخگو. به نظرم قیمت‌ها مناسب و کیفیت عالیه. حتماً دوباره می‌خرم.</p>
-        <div style="font-weight:700; color:#111827"> — امیر، اصفهان</div>
-      </div>
-      <div class="testimonial">
-        <p>رابط کاربری ساده و تجربه خرید روان. پیشنهاد ویژه‌ها هم واقعاً خوب هستند.</p>
-        <div style="font-weight:700; color:#111827"> — نرگس، شیراز</div>
-      </div>
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">چرا ما را انتخاب کنید؟</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚚</div>
+                    <h3 class="feature-title">ارسال سریع</h3>
+                    <p class="feature-desc">ارسال رایگان برای سفارش‌های بالای ۵۰۰ هزار تومان</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="feature-title">پرداخت امن</h3>
+                    <p class="feature-desc">درگاه پرداخت معتبر و امن برای خیال راحت شما</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <h3 class="feature-title">ضمانت اصالت</h3>
+                    <p class="feature-desc">تمام محصولات اصل و دارای گارانتی معتبر</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3 class="feature-title">پشتیبانی ۲۴/۷</h3>
+                    <p class="feature-desc">پشتیبانی در تمام ساعات شبانه‌روز</p>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <!-- Final CTA -->
-    <section class="footer-cta" aria-label="Call to action">
-      <div class="title">آماده‌ای خرید متفاوت را شروع کنی؟</div>
-      <div class="sub">همین الآن وارد DigiShop شو و از پیشنهادهای ویژه ما استفاده کن.</div>
-      <a class="btn-cta" href="/products/">ورود به فروشگاه</a>
+    <!-- Latest Products Section -->
+    <section class="products-section" id="products">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">جدیدترین محصولات</h2>
+                <a href="{% url 'product_list' %}" class="view-all-link">
+                    مشاهده همه
+                    <span>←</span>
+                </a>
+            </div>
+            
+            {% if latest_products %}
+                <div class="products-grid">
+                    {% for product in latest_products %}
+                        <a href="{{ product.get_absolute_url }}" class="product-card">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.title }}" class="product-image">
+                            {% else %}
+                                <div class="product-image" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 64px;">
+                                    📦
+                                </div>
+                            {% endif %}
+                            <div class="product-info">
+                                <h3 class="product-title">{{ product.title }}</h3>
+                                <div class="product-price">
+                                    {{ product.price|intcomma }} <span>تومان</span>
+                                </div>
+                                {% if product.active %}
+                                    <span class="product-status available">موجود در انبار</span>
+                                {% else %}
+                                    <span class="product-status unavailable">ناموجود</span>
+                                {% endif %}
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">📭</div>
+                    <h3>هنوز محصولی اضافه نشده</h3>
+                    <p>به زودی محصولات جدید اضافه می‌شود</p>
+                </div>
+            {% endif %}
+        </div>
     </section>
-  </div>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="container">
+            <h2 class="section-title">نظرات مشتریان</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"خرید از این فروشگاه تجربه فوق‌العاده‌ای بود. محصولات باکیفیت و ارسال سریع!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">س</div>
+                        <div class="author-info">
+                            <h4>سارا احمدی</h4>
+                            <p>تهران</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"پشتیبانی عالی و قیمت‌های مناسب. حتماً دوباره خرید می‌کنم."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">ا</div>
+                        <div class="author-info">
+                            <h4>امیر رضایی</h4>
+                            <p>اصفهان</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"رابط کاربری ساده و فرآیند خرید آسان. پیشنهاد می‌کنم!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">ن</div>
+                        <div class="author-info">
+                            <h4>نرگس کریمی</h4>
+                            <p>شیراز</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>آماده‌ای خرید کنی؟ 🎉</h2>
+            <p>همین الان محصولات مورد نظرت رو پیدا کن و سفارش بده!</p>
+            <a href="{% url 'product_list' %}" class="btn-primary" style="background: white; color: var(--primary);">
+                شروع خرید
+                <span>🛒</span>
+            </a>
+        </div>
+    </section>
 </div>
 
 <script>
-/* Small interactive behaviors: search redirect, carousel controls and auto-play,
-   and a helper to swap placeholder with user-provided animation later. */
-
-/* Search */
-(function(){
-  const searchInput = document.getElementById('searchInput');
-  const searchBtn = document.getElementById('searchBtn');
-  function doSearch(){
-    const q = (searchInput.value || '').trim();
-    // if q exists, redirect to /products/?q=... else go to products page
-    if(q.length) window.location.href = '/products/?q=' + encodeURIComponent(q);
-    else window.location.href = '/products/';
-  }
-  searchBtn.addEventListener('click', doSearch);
-  searchInput.addEventListener('keydown', function(e){
-    if(e.key === 'Enter') { e.preventDefault(); doSearch(); }
-  });
-})();
-
-/* Carousel (simple) */
-(function(){
-  const carousel = document.getElementById('carousel');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-
-  // scroll amount equals one card width (assumes fixed card width)
-  function scrollByCard(dir){
-    const card = carousel.querySelector('.product-card');
-    if(!card) return;
-    const gap = 14; // match CSS gap
-    const w = card.getBoundingClientRect().width + gap;
-    carousel.scrollBy({ left: dir * w, behavior: 'smooth' });
-  }
-  prevBtn.addEventListener('click', ()=> scrollByCard(-1));
-  nextBtn.addEventListener('click', ()=> scrollByCard(1));
-
-  // autoplay
-  let auto = setInterval(()=> scrollByCard(1), 4200);
-  // pause on hover
-  carousel.addEventListener('mouseenter', ()=> clearInterval(auto));
-  carousel.addEventListener('mouseleave', ()=> { auto = setInterval(()=> scrollByCard(1), 4200); });
-
-  // accessibility: keyboard nav
-  prevBtn.addEventListener('keydown', (e)=>{ if(e.key==='Enter') scrollByCard(-1); });
-  nextBtn.addEventListener('keydown', (e)=>{ if(e.key==='Enter') scrollByCard(1); });
-})();
-
-/* Placeholder replacement helper
-   If you want to programmatically set an animation (gif or <lottie-player>) later,
-   call: replaceHeroAnimation(htmlString) where htmlString contains <img ...> or <lottie-player ...>
-*/
-function replaceHeroAnimation(htmlString){
-  const mediaCard = document.getElementById('mediaCard');
-  if(!mediaCard) return;
-  mediaCard.innerHTML = htmlString;
-  // add simple float animation to new content
-  mediaCard.style.animation = 'float 3s ease-in-out infinite';
-}
-
-/* small focus effect on search */
-document.getElementById('searchInput').addEventListener('focus', function(){
-  this.parentElement.style.boxShadow = '0 10px 30px rgba(2,6,23,0.12)';
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
 });
-document.getElementById('searchInput').addEventListener('blur', function(){
-  this.parentElement.style.boxShadow = 'none';
+
+// Add animation on scroll
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.product-card, .feature-card, .testimonial-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'all 0.6s ease';
+    observer.observe(el);
 });
 </script>
 

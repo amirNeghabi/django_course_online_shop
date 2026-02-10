@@ -65,6 +65,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'payment',
     'ckeditor',
+  
+    'dashboard',
 ]
 
 SITE_ID = 1

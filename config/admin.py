@@ -1,56 +1,57 @@
-"""
-سفارشی‌سازی پنل ادمین Django
-"""
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
+from django.shortcuts import render
 
 
-# تابع برای اضافه کردن داده‌های داشبورد به context
-def get_admin_context():
-    from products.models import Product
+admin.site.site_header = _('پنل مدیریت فروشگاه')
+admin.site.site_title = _('مدیریت فروشگاه')
+admin.site.index_title = _('خوش آمدید به پنل مدیریت')
+admin.site.empty_value_display = _('-')
+
+
+def custom_index(self, request, extra_context=None):
     from orders.models import Order
-    from django.contrib.auth import get_user_model
+    from products.models import Product
+    from accounts.models import CustomUser
     
-    User = get_user_model()
-    
-    # آمار کلی
     total_orders = Order.objects.count()
-    total_users = User.objects.count()
-    total_products = Product.objects.filter(active=True).count()
     
-    # محاسبه مجموع فروش
     total_revenue = 0
     for order in Order.objects.filter(is_paid=True):
         total_revenue += order.get_total_price()
     
-    # آخرین سفارشات و محصولات
+    total_users = CustomUser.objects.count()
+    total_products = Product.objects.count()
+    
     recent_orders = Order.objects.select_related('user').order_by('-datetime_created')[:5]
     recent_products = Product.objects.order_by('-datetime_created')[:5]
     
-    return {
+    context = {
+        **self.each_context(request),
+        'title': self.index_title,
         'total_orders': total_orders,
+        'total_revenue': total_revenue,
         'total_users': total_users,
         'total_products': total_products,
-        'total_revenue': total_revenue,
         'recent_orders': recent_orders,
         'recent_products': recent_products,
     }
-
-
-# Override AdminSite
-class CustomAdminSite(admin.AdminSite):
-    site_header = 'پنل مدیریت فروشگاه'
-    site_title = 'مدیریت فروشگاه'
-    index_title = 'خوش آمدید به پنل مدیریت'
     
-    def each_context(self, request):
-        context = super().each_context(request)
-        # اضافه کردن داده‌های سفارشی فقط برای صفحه اصلی
-        if request.path == '/admin/' or request.path == '/admin':
-            context.update(get_admin_context())
-        return context
+    if extra_context:
+        context.update(extra_context)
+    
+    return render(request, 'admin/index.html', context)
 
 
-# جایگزین کردن admin site پیش‌فرض
-admin.site = CustomAdminSite()
-admin.sites.site = admin.site
+admin.site.index = custom_index.__get__(admin.site, admin.AdminSite)
+
+
+class BaseAdmin(admin.ModelAdmin):
+    save_on_top = True
+    list_per_page = 25
+    
+    class Media:
+        css = {
+            'all': ('admin/css/custom_admin.css',)
+        }
+        js = ('admin/js/custom_admin.js',)
