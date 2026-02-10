@@ -1,0 +1,22 @@
+{% extends "_base.html" %}
+
+{% block content %}
+<div style="max-width:500px;margin:80px auto;padding:40px;border-radius:12px;
+box-shadow:0 0 20px rgba(0,0,0,.1);text-align:center">
+
+    <h2>درگاه پرداخت آزمایشی</h2>
+    <p>این درگاه فقط جهت تست پروژه است</p>
+
+    <a href="{% url 'payment:fake_result' 'success' %}"
+       style="display:block;background:#28a745;color:white;padding:12px;
+       margin:15px 0;border-radius:8px;text-decoration:none">
+        پرداخت موفق
+    </a>
+
+    <a href="{% url 'payment:fake_result' 'failed' %}"
+       style="display:block;background:#dc3545;color:white;padding:12px;
+       border-radius:8px;text-decoration:none">
+        پرداخت ناموفق
+    </a>
+</div>
+{% endblock %}

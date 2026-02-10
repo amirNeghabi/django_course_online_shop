@@ -1,14 +1,67 @@
 {% extends '_base.html' %}
 
-{% block page_title %}
-    Logout
-{% endblock %}
+{% block page_title %}خروج{% endblock %}
 
 {% block content %}
-    <h1>Log Out</h1>
-    <h2>Are you sure you want to logout?</h2>
-    <form action="" method="post">
-        {% csrf_token %}
-        <input type="submit" value="Are you sure?">
-    </form>
+<style>
+.auth-bg{
+    min-height:70vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:radial-gradient(circle at top,#ffecec,#f8f9fa);
+}
+.auth-box{
+    width:100%;
+    max-width:420px;
+    padding:35px;
+    border-radius:18px;
+    background:rgba(255,255,255,.75);
+    backdrop-filter:blur(14px);
+    box-shadow:0 30px 60px rgba(0,0,0,.15);
+    animation:fadeUp .6s ease;
+    text-align:center;
+}
+.auth-box h2{
+    font-weight:800;
+    margin-bottom:10px;
+}
+.auth-box p{
+    font-size:14px;
+    color:#666;
+    margin-bottom:20px;
+}
+.logout-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:600;
+    background:linear-gradient(135deg,#dc3545,#b02a37);
+    color:#fff;
+    transition:.3s;
+}
+.logout-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(220,53,69,.35);
+}
+
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(30px)}
+    to{opacity:1;transform:translateY(0)}
+}
+</style>
+
+<div class="auth-bg">
+    <div class="auth-box">
+        <h2>خروج از حساب 👋</h2>
+        <p>اگر خارج بشی، دوباره باید وارد شی</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <button class="logout-btn" type="submit">بله، خروج</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

@@ -1,17 +1,94 @@
 {% extends '_base.html' %}
-
 {% load crispy_forms_tags %}
 
-{% block page_title %}
-    Sign Up
-{% endblock %}
+{% block page_title %}ثبت نام{% endblock %}
 
 {% block content %}
-    <h1>Sign Up</h1>
+<style>
+.auth-bg{
+    min-height:80vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:radial-gradient(circle at top,#f1ecff,#f9fafb);
+}
+.auth-box{
+    width:100%;
+    max-width:460px;
+    padding:35px;
+    border-radius:18px;
+    background:rgba(255,255,255,.75);
+    backdrop-filter:blur(14px);
+    box-shadow:0 30px 60px rgba(0,0,0,.15);
+    animation:fadeUp .7s ease;
+}
+.auth-box h2{
+    text-align:center;
+    font-weight:800;
+}
+.auth-box p{
+    text-align:center;
+    font-size:14px;
+    color:#666;
+    margin-bottom:22px;
+}
+.auth-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:600;
+    background:linear-gradient(135deg,#6610f2,#6f42c1);
+    color:#fff;
+    transition:.3s;
+}
+.auth-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(102,16,242,.35);
+}
+.auth-footer{
+    margin-top:18px;
+    text-align:center;
+    font-size:14px;
+}
+.auth-footer a{
+    font-weight:600;
+    background:linear-gradient(135deg,#6610f2,#6f42c1);
+    -webkit-background-clip:text;
+    color:transparent;
+    text-decoration:none;
+}
 
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <input type="submit" value="Sign Up">
-    </form>
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(30px)}
+    to{opacity:1;transform:translateY(0)}
+}
+</style>
+
+<div class="auth-bg">
+    <div class="auth-box">
+        <h2>ساخت حساب جدید ✨</h2>
+        <p>کمتر از یک دقیقه تا شروع خرید</p>
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class="auth-btn" type="submit">ثبت نام</button>
+        </form>
+
+        <div class="auth-footer">
+            حساب داری؟
+            <a href="{% url 'account_login' %}">وارد شو</a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll("input").forEach(el=>{
+    el.addEventListener("focus",()=>{
+        el.style.boxShadow="0 0 0 3px rgba(111,66,193,.25)";
+    });
+});
+</script>
 {% endblock %}

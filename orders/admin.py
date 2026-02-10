@@ -18,7 +18,7 @@ class OrderItemInline(admin.TabularInline):
     def get_total_price(self, obj):
         if obj.pk:
             total = obj.quantity * obj.price
-            return format_html('<strong>{:,} تومان</strong>', total)
+            return format_html('<strong>{} تومان</strong>', f'{total:,}')
         return '-'
 
 
@@ -30,7 +30,7 @@ class OrderAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
         'user_link',
         'full_name',
         'phone_number',
-        'is_paid',                 # ✅ اضافه شد
+        'is_paid',
         'total_price_display',
         'items_count',
         'payment_status',
@@ -53,7 +53,7 @@ class OrderAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
         'zarinpal_authority',
     ]
 
-    list_editable = ['is_paid']   # ✅ حالا بدون ارور
+    list_editable = ['is_paid']
 
     list_per_page = 25
     ordering = ['-datetime_created']
@@ -89,13 +89,14 @@ class OrderAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     def full_name(self, obj):
         return f'{obj.first_name} {obj.last_name}'
 
-    @admin.display(description=_('مبلغ کل'))
+    @admin.display(description=_('مبلغ کل'), ordering='id')
     def total_price_display(self, obj):
-        total = obj.get_total_price()
+        total = int(obj.get_total_price() or 0)
         color = '#28a745' if obj.is_paid else '#dc3545'
         return format_html(
-            '<strong style="color:{}">{:,} تومان</strong>',
-            color, total
+            '<strong style="color:{}">{} تومان</strong>',
+            color,
+            f'{total:,}'
         )
 
     @admin.display(description=_('تعداد آیتم'))
