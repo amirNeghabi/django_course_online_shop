@@ -1,5 +1,5 @@
 from django.views import generic
-from django.shortcuts import get_object_or_404, reverse, render
+from django.shortcuts import get_object_or_404, reverse, render, redirect
 from django.http import HttpResponse
 from django.utils.translation import gettext as _
 from django.contrib import messages
@@ -29,22 +29,22 @@ class ProductDetailView(generic.DetailView):
         return context
 
 
-class CommentCreateView(generic.CreateView):
-    model = Comment
-    form_class = CommentForm
-
-    # def get_success_url(self):
-    #     return reverse('product_list')
-
-    def form_valid(self, form):
-        obj = form.save(commit=False)
-        obj.author = self.request.user
-
-        product_id = int(self.kwargs['product_id'])
-        product = get_object_or_404(Product, id=product_id)
-        obj.product = product
-
-        messages.success(self.request, _('Comment successfully created'))
-
-        return super().form_valid(form)
-
+def comment_create(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    
+    if request.method == 'POST':
+        body = request.POST.get('body')
+        stars = request.POST.get('stars')
+        
+        if body and stars:
+            Comment.objects.create(
+                product=product,
+                author=request.user,
+                body=body,
+                stars=stars
+            )
+            messages.success(request, 'نظر شما با موفقیت ثبت شد')
+        else:
+            messages.error(request, 'لطفاً همه فیلدها را پر کنید')
+    
+    return redirect('product_detail', pk=product_id)
