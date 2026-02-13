@@ -3,7 +3,6 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.html import format_html
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django.db.models import Count, Sum
 from jalali_date.admin import ModelAdminJalaliMixin
 
 from .forms import CustomUserChangeForm, CustomUserCreationForm
@@ -39,7 +38,6 @@ class CustomUserAdmin(ModelAdminJalaliMixin, UserAdmin):
     ]
     
     search_fields = ['email', 'username', 'first_name', 'last_name']
-    list_editable = []
     list_per_page = 25
     ordering = ['-date_joined']
     date_hierarchy = 'date_joined'
@@ -80,7 +78,7 @@ class CustomUserAdmin(ModelAdminJalaliMixin, UserAdmin):
             'fields': ('first_name', 'last_name')
         }),
         (_('دسترسی‌ها'), {
-            'fields': ('is_active', 'is_staff', 'is_superuser')
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')
         }),
     )
     

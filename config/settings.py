@@ -28,6 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("DJANGO_SECRET_KEY")
+DEEPSEARCH_API_KEY = env("DEEPSEEK_API_KEY")
+
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DJANGO_DEBUG")
@@ -65,8 +68,9 @@ INSTALLED_APPS = [
     'allauth.account',
     'payment',
     'ckeditor',
-  
+   'ai_assistant',
     'dashboard',
+    'support',
 ]
 
 SITE_ID = 1

@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils.translation import gettext as _
 
 from cart.cart import Cart
 from .forms import OrderForm
-from .models import OrderItem
+from .models import Order, OrderItem
 
 @login_required
 def order_create_view(request):
@@ -17,7 +17,7 @@ def order_create_view(request):
         return redirect('product_list')
 
     if request.method == 'POST':
-        order_form = OrderForm(request.POST, )
+        order_form = OrderForm(request.POST)
 
         if order_form.is_valid():
             order_obj = order_form.save(commit=False)
@@ -42,6 +42,19 @@ def order_create_view(request):
             request.session['order_id'] = order_obj.id
             return redirect('payment:payment_process')
 
-    return render(request, 'orders/order_create.html', {
-        'form': order_form,
-    })
+    return render(request, 'orders/order_create.html', {'form': order_form})
+
+# -------------------------------------------------------
+# ویو لیست سفارش‌ها
+@login_required
+def order_list_view(request):
+    orders = Order.objects.filter(user=request.user).order_by('-datetime_created')
+    return render(request, 'orders/order_list.html', {'orders': orders})
+
+# -------------------------------------------------------
+# ویو جزئیات سفارش
+@login_required
+def order_detail_view(request, pk):
+    order = get_object_or_404(Order, pk=pk, user=request.user)
+    items = order.items.all()
+    return render(request, 'orders/order_detail.html', {'order': order, 'items': items})

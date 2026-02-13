@@ -163,10 +163,12 @@
         </div>
         
         <div class="btn-group">
-            <a href="{% url 'cart:cart_detail' %}" class="btn-primary">
+            {% if order %}
+            <a href="{% url 'payment:retry_payment' order.id %}" class="btn-primary">
                 <i class="fas fa-redo"></i>
-                تلاش مجدد
+                پرداخت مجدد
             </a>
+            {% endif %}
             <a href="{% url 'product_list' %}" class="btn-secondary">
                 <i class="fas fa-shopping-bag"></i>
                 بازگشت به فروشگاه

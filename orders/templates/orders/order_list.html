@@ -1,0 +1,50 @@
+{% extends '_base.html' %}
+{% load humanize %}
+
+
+{% block page_title %}سفارش‌های من{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4">سفارش‌های من</h2>
+
+    {% if orders %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>کد سفارش</th>
+                    <th>تاریخ</th>
+                    <th>وضعیت</th>
+                    <th>مجموع</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>#{{ order.id }}</td>
+                        <td>{{ order.datetime_created|date:"Y/m/d H:i" }}</td>
+                        <td>
+                            {% if order.is_paid %}
+                                <span style="color: #28a745; font-weight: 700;">پرداخت شده</span>
+                            {% else %}
+                                <span style="color: #dc3545; font-weight: 700;">پرداخت نشده</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ order.get_total_price|intcomma }} تومان</td>
+                        <td>
+                            <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-primary">
+                                جزئیات
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">
+            هنوز سفارشی ثبت نکرده‌اید.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

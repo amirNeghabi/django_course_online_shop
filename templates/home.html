@@ -429,60 +429,271 @@
     font-size: 16px;
 }
 
-/* ========== Testimonials ========== */
-.testimonials-section {
+/* ========== BESTSELLERS SECTION (جدید!) ========== */
+.bestsellers-section {
     padding: 80px 20px;
-    background: white;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    position: relative;
+    overflow: hidden;
 }
 
-.testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
+.bestsellers-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -100px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(102, 126, 234, 0.05) 0%, transparent 70%);
+    border-radius: 50%;
 }
 
-.testimonial-card {
-    background: var(--bg-light);
-    padding: 30px;
-    border-radius: 20px;
-    border-right: 4px solid var(--primary);
+.bestsellers-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
 }
 
-.testimonial-text {
+.bestsellers-header h2 {
+    font-size: 36px;
+    font-weight: 900;
     color: var(--text-dark);
-    line-height: 1.8;
-    margin-bottom: 20px;
-    font-style: italic;
-}
-
-.testimonial-author {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.author-avatar {
+.fire-icon {
+    font-size: 42px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.carousel-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.carousel-btn {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    background: white;
+    border: 2px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
     font-size: 20px;
+    color: var(--primary);
 }
 
-.author-info h4 {
+.carousel-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: scale(1.1);
+}
+
+.carousel-btn:active {
+    transform: scale(0.95);
+}
+
+.bestsellers-carousel {
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 25px;
+    transition: transform 0.5s ease;
+    padding: 20px 0;
+}
+
+.bestseller-card {
+    min-width: 320px;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+}
+
+.bestseller-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+.bestseller-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    z-index: 10;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.bestseller-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 250px;
+    background: var(--bg-light);
+}
+
+.bestseller-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.bestseller-card:hover .bestseller-image {
+    transform: scale(1.1);
+}
+
+.bestseller-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+    padding: 15px;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.bestseller-card:hover .bestseller-overlay {
+    opacity: 1;
+}
+
+.quick-view-btn {
+    background: white;
+    color: var(--primary);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.bestseller-info {
+    padding: 20px;
+}
+
+.bestseller-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.sales-count {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #fbbf24;
+    font-size: 14px;
+}
+
+.bestseller-title {
+    font-size: 18px;
     font-weight: 700;
     color: var(--text-dark);
-    margin-bottom: 3px;
+    margin-bottom: 15px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
-.author-info p {
-    color: var(--text-muted);
-    font-size: 14px;
+.bestseller-price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bestseller-price {
+    font-size: 26px;
+    font-weight: 900;
+    color: var(--primary);
+}
+
+.bestseller-price span {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.add-to-cart-btn {
+    background: linear-gradient(135deg, var(--accent) 0%, #38a169 100%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.add-to-cart-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(72, 187, 120, 0.3);
+}
+
+/* Progress Indicators */
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.indicator {
+    width: 40px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator.active {
+    background: var(--primary);
+    width: 60px;
 }
 
 /* ========== CTA Section ========== */
@@ -531,6 +742,15 @@
     
     .products-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+    
+    .bestseller-card {
+        min-width: 280px;
+    }
+    
+    .bestsellers-header {
+        flex-direction: column;
+        gap: 20px;
     }
 }
 
@@ -638,7 +858,7 @@
     </section>
 
     <!-- Latest Products Section -->
-    <section class="products-section" id="products">
+    <section class="products-section" id="latest-products">
         <div class="container">
             <div class="section-header">
                 <h2 class="section-title">جدیدترین محصولات</h2>
@@ -683,44 +903,139 @@
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section class="testimonials-section">
+    <!-- Bestsellers Section (جدید!) -->
+    <section class="bestsellers-section" id="bestsellers">
         <div class="container">
-            <h2 class="section-title">نظرات مشتریان</h2>
-            <div class="testimonials-grid">
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"خرید از این فروشگاه تجربه فوق‌العاده‌ای بود. محصولات باکیفیت و ارسال سریع!"</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">س</div>
-                        <div class="author-info">
-                            <h4>سارا احمدی</h4>
-                            <p>تهران</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"پشتیبانی عالی و قیمت‌های مناسب. حتماً دوباره خرید می‌کنم."</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">ا</div>
-                        <div class="author-info">
-                            <h4>امیر رضایی</h4>
-                            <p>اصفهان</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="testimonial-card">
-                    <p class="testimonial-text">"رابط کاربری ساده و فرآیند خرید آسان. پیشنهاد می‌کنم!"</p>
-                    <div class="testimonial-author">
-                        <div class="author-avatar">ن</div>
-                        <div class="author-info">
-                            <h4>نرگس کریمی</h4>
-                            <p>شیراز</p>
-                        </div>
-                    </div>
+            <div class="bestsellers-header">
+                <h2>
+                    <span class="fire-icon">🔥</span>
+                    محصولات پرفروش
+                </h2>
+                <div class="carousel-controls">
+                    <button class="carousel-btn" id="prevBtn" aria-label="قبلی">‹</button>
+                    <button class="carousel-btn" id="nextBtn" aria-label="بعدی">›</button>
                 </div>
             </div>
+
+            {% if bestseller_products %}
+                <div class="bestsellers-carousel">
+                    <div class="carousel-track" id="carouselTrack">
+                        {% for product in bestseller_products %}
+                            <div class="bestseller-card">
+                                <span class="bestseller-badge">🔥 پرفروش</span>
+                                
+                                <!-- Link به صفحه محصول -->
+                                <a href="{{ product.get_absolute_url }}" class="bestseller-link">
+                                    <div class="bestseller-image-wrapper">
+                                        {% if product.image %}
+                                            <img src="{{ product.image.url }}" alt="{{ product.title }}" class="bestseller-image">
+                                        {% else %}
+                                            <div class="bestseller-image" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 64px;">
+                                                🎯
+                                            </div>
+                                        {% endif %}
+                                        <div class="bestseller-overlay">
+                                            <button class="quick-view-btn">مشاهده سریع</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bestseller-info">
+                                        <div class="bestseller-meta">
+                                            <span class="sales-count">
+                                                <span>🛒</span>
+                                                <span>{{ product.sold_count|default:"۱۰۰+" }} فروش</span>
+                                            </span>
+                                            <span class="rating">
+                                                <span>⭐</span>
+                                                <span>{{ product.stars|default:"۴.۸" }}</span>
+                                            </span>
+                                        </div>
+                                        <h3 class="bestseller-title">{{ product.title }}</h3>
+                                    </div>
+                                </a>
+                                
+                                <!-- دکمه افزودن به سبد (خارج از link) -->
+                                <div class="bestseller-price-row">
+                                    <div class="bestseller-price">
+                                        {{ product.price|intcomma }} <span>تومان</span>
+                                    </div>
+                                    <form action="{% url 'cart:cart_add' product.id %}" method="POST" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit" class="add-to-cart-btn">
+                                            <span>+</span>
+                                            <span>سبد</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="carousel-indicators" id="indicators"></div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔥</div>
+                    <h3>محصولات پرفروش به زودی</h3>
+                    <p>در حال آماده‌سازی محصولات پرفروش برای شما هستیم</p>
+                </div>
+            {% endif %}
+
+            <!-- CSS اضافی برای درست کار کردن -->
+            <style>
+            .bestseller-card {
+                position: relative;
+                min-width: 320px;
+                background: white;
+                border-radius: 20px;
+                overflow: hidden;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+                transition: all 0.3s ease;
+            }
+
+            .bestseller-link {
+                text-decoration: none;
+                color: inherit;
+                display: block;
+            }
+
+            .bestseller-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            }
+
+            .bestseller-price-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 20px 20px;
+            }
+
+            .bestseller-price-row form {
+                margin: 0;
+            }
+
+            .add-to-cart-btn {
+                background: linear-gradient(135deg, var(--accent) 0%, #38a169 100%);
+                color: white;
+                padding: 10px 20px;
+                border-radius: 10px;
+                border: none;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-family: 'Vazir', sans-serif;
+            }
+
+            .add-to-cart-btn:hover {
+                transform: scale(1.05);
+                box-shadow: 0 8px 20px rgba(72, 187, 120, 0.3);
+            }
+            </style>
         </div>
     </section>
 
@@ -749,6 +1064,82 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// Carousel functionality
+(function() {
+    const track = document.getElementById('carouselTrack');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const indicatorsContainer = document.getElementById('indicators');
+    
+    if (!track) return;
+    
+    const cards = track.querySelectorAll('.bestseller-card');
+    const cardWidth = 320 + 25; // card width + gap
+    let currentIndex = 0;
+    const visibleCards = window.innerWidth > 768 ? 3 : 1;
+    const maxIndex = Math.max(0, cards.length - visibleCards);
+    
+    // Create indicators
+    for (let i = 0; i <= maxIndex; i++) {
+        const indicator = document.createElement('div');
+        indicator.className = 'indicator' + (i === 0 ? ' active' : '');
+        indicator.addEventListener('click', () => goToSlide(i));
+        indicatorsContainer.appendChild(indicator);
+    }
+    
+    function updateCarousel() {
+        const offset = currentIndex * cardWidth;
+        track.style.transform = `translateX(${offset}px)`;
+        
+        // Update indicators
+        const indicators = indicatorsContainer.querySelectorAll('.indicator');
+        indicators.forEach((ind, idx) => {
+            ind.classList.toggle('active', idx === currentIndex);
+        });
+    }
+    
+    function goToSlide(index) {
+        currentIndex = Math.max(0, Math.min(index, maxIndex));
+        updateCarousel();
+    }
+    
+    function nextSlide() {
+        if (currentIndex < maxIndex) {
+            currentIndex++;
+        } else {
+            currentIndex = 0; // Loop back to start
+        }
+        updateCarousel();
+    }
+    
+    function prevSlide() {
+        if (currentIndex > 0) {
+            currentIndex--;
+        } else {
+            currentIndex = maxIndex; // Loop to end
+        }
+        updateCarousel();
+    }
+    
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+    
+    // Auto-play
+    let autoplay = setInterval(nextSlide, 4000);
+    
+    // Pause on hover
+    track.addEventListener('mouseenter', () => clearInterval(autoplay));
+    track.addEventListener('mouseleave', () => {
+        autoplay = setInterval(nextSlide, 4000);
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') prevSlide();
+        if (e.key === 'ArrowLeft') nextSlide();
+    });
+})();
+
 // Add animation on scroll
 const observerOptions = {
     threshold: 0.1,
@@ -764,12 +1155,721 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-document.querySelectorAll('.product-card, .feature-card, .testimonial-card').forEach(el => {
+document.querySelectorAll('.product-card, .feature-card, .bestseller-card').forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(30px)';
     el.style.transition = 'all 0.6s ease';
     observer.observe(el);
 });
+</script>
+
+<!-- ========== 🤖 AI Chat Widget - جدید ========== -->
+<div id="ai-chat-widget-container">
+    <!-- دکمه شناور -->
+    <button id="ai-chat-toggle-btn" class="ai-floating-btn" aria-label="دستیار هوشمند">
+        <div class="ai-btn-content">
+            <svg class="ai-icon-main" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="ai-emoji-badge">🤖</span>
+        </div>
+        <span class="ai-ping"></span>
+    </button>
+    
+    <!-- پنجره چت -->
+    <div id="ai-chat-panel" class="ai-chat-panel">
+        <!-- هدر -->
+        <div class="ai-panel-header">
+            <div class="ai-header-left">
+                <div class="ai-bot-avatar">
+                    <span>🤖</span>
+                    <span class="ai-status-dot"></span>
+                </div>
+                <div class="ai-header-text">
+                    <h3>دستیار هوشمند</h3>
+                    <p class="ai-status-text">آنلاین و آماده پاسخگویی</p>
+                </div>
+            </div>
+            <div class="ai-header-actions">
+                <button class="ai-action-btn" id="ai-clear-btn" title="پاک کردن چت">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
+                    </svg>
+                </button>
+                <button class="ai-action-btn" id="ai-minimize-btn" title="بستن">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- نوار محدودیت -->
+        <div class="ai-limit-notice" id="ai-limit-notice" style="display: none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <span id="ai-limit-text"></span>
+        </div>
+        
+        <!-- قسمت پیام‌ها -->
+        <div class="ai-messages-container" id="ai-messages-box">
+            <!-- پیام خوش‌آمدگویی -->
+            <div class="ai-message ai-bot-message">
+                <div class="ai-msg-avatar">🤖</div>
+                <div class="ai-msg-bubble">
+                    <p><strong>سلام! 👋</strong></p>
+                    <p>من دستیار هوشمند فروشگاه هستم.</p>
+                    <p>می‌تونم در مورد محصولات، قیمت‌ها، ویژگی‌ها و خرید بهتون کمک کنم! 🛍️</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- انیمیشن در حال تایپ -->
+        <div class="ai-typing-indicator" id="ai-typing" style="display: none;">
+            <div class="ai-typing-dot"></div>
+            <div class="ai-typing-dot"></div>
+            <div class="ai-typing-dot"></div>
+            <span class="ai-typing-text">در حال تایپ...</span>
+        </div>
+        
+        <!-- فوتر (فرم ارسال) -->
+        <div class="ai-panel-footer">
+            <form id="ai-message-form" class="ai-input-form">
+                <input 
+                    type="text" 
+                    id="ai-user-input" 
+                    placeholder="سوال خود را بپرسید..." 
+                    autocomplete="off"
+                    maxlength="500"
+                >
+                <button type="submit" class="ai-send-btn" id="ai-send-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+/* ========== AI Widget Styles ========== */
+:root {
+    --ai-primary: #667eea;
+    --ai-primary-dark: #764ba2;
+    --ai-success: #48bb78;
+    --ai-danger: #f56565;
+    --ai-warning: #ed8936;
+    --ai-info: #4299e1;
+    --ai-text: #2d3748;
+    --ai-text-light: #718096;
+    --ai-bg: #f8f9fa;
+    --ai-border: #e2e8f0;
+    --ai-white: #ffffff;
+}
+
+/* ========== دکمه شناور ========== */
+.ai-floating-btn {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ai-primary) 0%, var(--ai-primary-dark) 100%);
+    border: none;
+    box-shadow: 0 10px 35px rgba(102, 126, 234, 0.4);
+    cursor: pointer;
+    z-index: 9999;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.ai-floating-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 15px 45px rgba(102, 126, 234, 0.5);
+}
+
+.ai-floating-btn:active {
+    transform: scale(0.95);
+}
+
+.ai-btn-content {
+    position: relative;
+    color: var(--ai-white);
+}
+
+.ai-icon-main {
+    width: 30px;
+    height: 30px;
+}
+
+.ai-emoji-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: 22px;
+    animation: ai-bounce 2.5s ease-in-out infinite;
+}
+
+@keyframes ai-bounce {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(10deg); }
+}
+
+.ai-ping {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--ai-primary);
+    opacity: 0.75;
+    animation: ai-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ai-ping {
+    75%, 100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+/* ========== پنجره چت ========== */
+.ai-chat-panel {
+    position: fixed;
+    bottom: 100px;
+    left: 25px;
+    width: 420px;
+    height: 650px;
+    background: var(--ai-white);
+    border-radius: 20px;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+    display: none;
+    flex-direction: column;
+    z-index: 9998;
+    overflow: hidden;
+    animation: ai-slide-up 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes ai-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.ai-chat-panel.active {
+    display: flex;
+}
+
+/* ========== هدر ========== */
+.ai-panel-header {
+    background: linear-gradient(135deg, var(--ai-primary) 0%, var(--ai-primary-dark) 100%);
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.ai-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ai-bot-avatar {
+    position: relative;
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.ai-status-dot {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    background: var(--ai-success);
+    border: 2px solid var(--ai-white);
+    border-radius: 50%;
+    animation: ai-pulse 2s infinite;
+}
+
+@keyframes ai-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.ai-header-text h3 {
+    margin: 0;
+    color: var(--ai-white);
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.ai-status-text {
+    margin: 2px 0 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+}
+
+.ai-header-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.ai-action-btn {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ai-white);
+    transition: all 0.2s;
+}
+
+.ai-action-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.ai-action-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2;
+}
+
+/* ========== نوار محدودیت ========== */
+.ai-limit-notice {
+    background: #fff3cd;
+    color: #856404;
+    padding: 10px 15px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #ffeaa7;
+}
+
+.ai-limit-notice svg {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2;
+    flex-shrink: 0;
+}
+
+/* ========== پیام‌ها ========== */
+.ai-messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+}
+
+.ai-message {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 18px;
+    animation: ai-fade-in 0.4s ease;
+}
+
+@keyframes ai-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ai-msg-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.ai-bot-message .ai-msg-avatar {
+    background: linear-gradient(135deg, var(--ai-primary) 0%, var(--ai-primary-dark) 100%);
+}
+
+.ai-user-message {
+    flex-direction: row-reverse;
+}
+
+.ai-user-message .ai-msg-avatar {
+    background: var(--ai-success);
+}
+
+.ai-msg-bubble {
+    background: var(--ai-white);
+    padding: 14px 18px;
+    border-radius: 16px;
+    max-width: 75%;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+    word-wrap: break-word;
+}
+
+.ai-user-message .ai-msg-bubble {
+    background: linear-gradient(135deg, var(--ai-primary) 0%, var(--ai-primary-dark) 100%);
+    color: var(--ai-white);
+}
+
+.ai-msg-bubble p {
+    margin: 0 0 8px 0;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.ai-msg-bubble p:last-child {
+    margin-bottom: 0;
+}
+
+/* ========== Typing Indicator ========== */
+.ai-typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 20px 15px;
+}
+
+.ai-typing-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--ai-text-light);
+    border-radius: 50%;
+    animation: ai-typing 1.4s infinite;
+}
+
+.ai-typing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.ai-typing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes ai-typing {
+    0%, 60%, 100% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-10px);
+    }
+}
+
+.ai-typing-text {
+    font-size: 13px;
+    color: var(--ai-text-light);
+    margin-right: 5px;
+}
+
+/* ========== فوتر ========== */
+.ai-panel-footer {
+    padding: 18px;
+    background: var(--ai-white);
+    border-top: 1px solid var(--ai-border);
+}
+
+.ai-input-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#ai-user-input {
+    flex: 1;
+    border: 2px solid var(--ai-border);
+    border-radius: 14px;
+    padding: 13px 18px;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s;
+    font-family: 'Vazir', -apple-system, sans-serif;
+}
+
+#ai-user-input:focus {
+    border-color: var(--ai-primary);
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.ai-send-btn {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--ai-primary) 0%, var(--ai-primary-dark) 100%);
+    border: none;
+    border-radius: 14px;
+    color: var(--ai-white);
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.ai-send-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+.ai-send-btn:active {
+    transform: scale(0.95);
+}
+
+.ai-send-btn svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2;
+}
+
+/* ========== Scrollbar ========== */
+.ai-messages-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.ai-messages-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.ai-messages-container::-webkit-scrollbar-thumb {
+    background: var(--ai-border);
+    border-radius: 10px;
+}
+
+.ai-messages-container::-webkit-scrollbar-thumb:hover {
+    background: var(--ai-text-light);
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 500px) {
+    .ai-floating-btn {
+        bottom: 20px;
+        left: 20px;
+        width: 56px;
+        height: 56px;
+    }
+    
+    .ai-chat-panel {
+        width: calc(100vw - 20px);
+        height: calc(100vh - 100px);
+        left: 10px;
+        bottom: 80px;
+        border-radius: 16px;
+    }
+}
+</style>
+
+<script>
+// 🤖 AI Chat Widget JavaScript
+(function() {
+    'use strict';
+    
+    const toggleBtn = document.getElementById('ai-chat-toggle-btn');
+    const chatPanel = document.getElementById('ai-chat-panel');
+    const minimizeBtn = document.getElementById('ai-minimize-btn');
+    const clearBtn = document.getElementById('ai-clear-btn');
+    const messageForm = document.getElementById('ai-message-form');
+    const userInput = document.getElementById('ai-user-input');
+    const messagesBox = document.getElementById('ai-messages-box');
+    const typingIndicator = document.getElementById('ai-typing');
+    const limitNotice = document.getElementById('ai-limit-notice');
+    const limitText = document.getElementById('ai-limit-text');
+    
+    // Toggle chat panel
+    toggleBtn.addEventListener('click', () => {
+        chatPanel.classList.toggle('active');
+        if (chatPanel.classList.contains('active')) {
+            userInput.focus();
+        }
+    });
+    
+    minimizeBtn.addEventListener('click', () => {
+        chatPanel.classList.remove('active');
+    });
+    
+    // Clear chat
+    clearBtn.addEventListener('click', async () => {
+        if (!confirm('آیا مطمئن هستید که می‌خواهید تاریخچه چت را پاک کنید؟')) {
+            return;
+        }
+        
+        try {
+            const response = await fetch('/ai-assistant/clear/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            });
+            
+            if (response.ok) {
+                messagesBox.innerHTML = `
+                    <div class="ai-message ai-bot-message">
+                        <div class="ai-msg-avatar">🤖</div>
+                        <div class="ai-msg-bubble">
+                            <p><strong>سلام! 👋</strong></p>
+                            <p>من دستیار هوشمند فروشگاه هستم.</p>
+                            <p>می‌تونم در مورد محصولات، قیمت‌ها، ویژگی‌ها و خرید بهتون کمک کنم! 🛍️</p>
+                        </div>
+                    </div>
+                `;
+                limitNotice.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Clear error:', error);
+            showError('خطا در پاک کردن چت');
+        }
+    });
+    
+    // Send message
+    messageForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const message = userInput.value.trim();
+        if (!message) return;
+        
+        // Add user message
+        addMessage(message, true);
+        userInput.value = '';
+        
+        // Show typing
+        typingIndicator.style.display = 'flex';
+        scrollToBottom();
+        
+        try {
+            const response = await fetch('/ai-assistant/ask/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({ message })
+            });
+            
+            typingIndicator.style.display = 'none';
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                // Add AI reply
+                addMessage(data.reply, false);
+                
+                // Update limit notice
+                if (data.remaining !== undefined) {
+                    updateLimitNotice(data.remaining, data.total_limit);
+                }
+            } else {
+                // Handle errors
+                if (data.limit_reached) {
+                    limitNotice.style.display = 'flex';
+                    limitNotice.style.background = '#f8d7da';
+                    limitNotice.style.color = '#721c24';
+                    limitText.textContent = data.error;
+                    showError(data.error);
+                } else {
+                    showError(data.error || 'خطا در دریافت پاسخ');
+                }
+            }
+        } catch (error) {
+            typingIndicator.style.display = 'none';
+            showError('⚠️ خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.');
+            console.error('Send error:', error);
+        }
+    });
+    
+    function addMessage(text, isUser) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `ai-message ${isUser ? 'ai-user-message' : 'ai-bot-message'}`;
+        
+        msgDiv.innerHTML = `
+            <div class="ai-msg-avatar">${isUser ? '👤' : '🤖'}</div>
+            <div class="ai-msg-bubble">
+                <p>${text.replace(/\n/g, '<br>')}</p>
+            </div>
+        `;
+        
+        messagesBox.appendChild(msgDiv);
+        scrollToBottom();
+    }
+    
+    function showError(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'ai-message ai-bot-message';
+        errorDiv.innerHTML = `
+            <div class="ai-msg-avatar">⚠️</div>
+            <div class="ai-msg-bubble" style="background: #fff5f5; color: var(--ai-danger);">
+                <p>${message}</p>
+            </div>
+        `;
+        messagesBox.appendChild(errorDiv);
+        scrollToBottom();
+    }
+    
+    function updateLimitNotice(remaining, total) {
+        if (remaining <= 3 && remaining > 0) {
+            limitNotice.style.display = 'flex';
+            limitNotice.style.background = '#fff3cd';
+            limitNotice.style.color = '#856404';
+            limitText.textContent = `⚠️ ${remaining} سوال از ${total} باقی مانده`;
+        } else if (remaining <= 0) {
+            limitNotice.style.display = 'flex';
+            limitNotice.style.background = '#f8d7da';
+            limitNotice.style.color = '#721c24';
+            limitText.textContent = `❌ محدودیت روزانه به پایان رسیده`;
+        }
+    }
+    
+    function scrollToBottom() {
+        messagesBox.scrollTop = messagesBox.scrollHeight;
+    }
+    
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+})();
 </script>
 
 {% endblock %}

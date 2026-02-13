@@ -1,0 +1,243 @@
+{% extends '_base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block page_title %}ثبت تیکت پشتیبانی | دیجی شاپ{% endblock %}
+
+{% block content %}
+<style>
+.support-page {
+    min-height: 80vh;
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+    padding: 60px 0;
+}
+
+.support-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.support-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.support-header h1 {
+    color: #fff;
+    font-size: 42px;
+    font-weight: 900;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.support-header p {
+    color: rgba(255,255,255,0.7);
+    font-size: 18px;
+}
+
+.support-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+.form-label {
+    color: #ffd700;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.form-control, .form-select {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    border-radius: 12px;
+    color: #fff;
+    padding: 15px 20px;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.form-control:focus, .form-select:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #ffd700;
+    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.1);
+    color: #fff;
+    outline: none;
+}
+
+.form-control::placeholder {
+    color: rgba(255,255,255,0.5);
+}
+
+.form-select option {
+    background: #2d3748;
+    color: #fff;
+}
+
+textarea.form-control {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #1a202c;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 18px;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 30px;
+}
+
+.submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
+}
+
+.info-boxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.info-box {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 16px;
+    padding: 25px;
+    text-align: center;
+}
+
+.info-box-icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.info-box-title {
+    color: #ffd700;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.info-box-desc {
+    color: rgba(255,255,255,0.7);
+    font-size: 14px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #ffd700;
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 30px;
+    transition: all 0.3s;
+}
+
+.back-link:hover {
+    color: #ffed4e;
+    gap: 12px;
+}
+
+.help-text {
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+    .support-header h1 {
+        font-size: 32px;
+    }
+    
+    .support-card {
+        padding: 25px;
+    }
+}
+</style>
+
+<div class="support-page">
+    <div class="container">
+        <div class="support-container">
+            
+            <a href="{% url 'accounts:profile' %}" class="back-link">
+                <i class="fas fa-arrow-right"></i>
+                بازگشت به پروفایل
+            </a>
+
+            <div class="support-header">
+                <h1>🎫 ثبت تیکت پشتیبانی</h1>
+                <p>ما اینجاییم تا کمکتون کنیم! مشکل یا سوال خود را با ما در میان بگذارید</p>
+            </div>
+
+            <div class="info-boxes">
+                <div class="info-box">
+                    <div class="info-box-icon">⚡</div>
+                    <div class="info-box-title">پاسخ سریع</div>
+                    <div class="info-box-desc">در کمتر از 24 ساعت پاسخ می‌دهیم</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-box-icon">🔒</div>
+                    <div class="info-box-title">امنیت کامل</div>
+                    <div class="info-box-desc">اطلاعات شما محرمانه می‌ماند</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-box-icon">💬</div>
+                    <div class="info-box-title">پشتیبانی 24/7</div>
+                    <div class="info-box-desc">همیشه در کنار شما هستیم</div>
+                </div>
+            </div>
+
+            <div class="support-card">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-4">
+                        <label class="form-label">دسته‌بندی</label>
+                        {{ form.category }}
+                        <div class="help-text">موضوع درخواست خود را انتخاب کنید</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">موضوع تیکت</label>
+                        {{ form.subject }}
+                        <div class="help-text">یک عنوان کوتاه و واضح برای مشکل خود بنویسید</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">توضیحات</label>
+                        {{ form.message }}
+                        <div class="help-text">مشکل یا سوال خود را با جزئیات توضیح دهید</div>
+                    </div>
+
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        ارسال تیکت
+                    </button>
+                </form>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="{% url 'support:my_tickets' %}" style="color: rgba(255,255,255,0.7); text-decoration: none;">
+                    <i class="fas fa-history"></i>
+                    مشاهده تیکت‌های قبلی
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

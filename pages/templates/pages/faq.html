@@ -1,0 +1,88 @@
+{% extends '_base.html' %}
+
+{% block page_title %}
+سوالات متداول | دیجی شاپ
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">❓ سوالات متداول</h2>
+        <p class="text-muted">پاسخ به پرتکرارترین سوالات شما درباره خرید از دیجی شاپ</p>
+    </div>
+
+    <div class="accordion" id="faqAccordion">
+
+        <!-- Question 1 -->
+        <div class="accordion-item mb-3 rounded-3 overflow-hidden border">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold" 
+                        type="button" 
+                        data-bs-toggle="collapse" 
+                        data-bs-target="#faq1">
+                    چگونه می‌توانم سفارشم را پیگیری کنم؟
+                </button>
+            </h2>
+            <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    با ورود به حساب کاربری و رفتن به بخش «پیگیری سفارش»، می‌توانید وضعیت سفارش‌های خود را مشاهده کنید.
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 2 -->
+        <div class="accordion-item mb-3 rounded-3 overflow-hidden border">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold" 
+                        type="button" 
+                        data-bs-toggle="collapse" 
+                        data-bs-target="#faq2">
+                    آیا امکان بازگشت کالا وجود دارد؟
+                </button>
+            </h2>
+            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    بله، تا ۷ روز پس از دریافت کالا امکان بازگشت طبق شرایط و قوانین وجود دارد.
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 3 -->
+        <div class="accordion-item mb-3 rounded-3 overflow-hidden border">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold" 
+                        type="button" 
+                        data-bs-toggle="collapse" 
+                        data-bs-target="#faq3">
+                    هزینه ارسال چگونه محاسبه می‌شود؟
+                </button>
+            </h2>
+            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    برای خریدهای بالای ۵۰۰,۰۰۰ تومان ارسال رایگان است. در غیر این صورت هزینه ارسال هنگام تسویه محاسبه می‌شود.
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 4 -->
+        <div class="accordion-item mb-3 rounded-3 overflow-hidden border">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold" 
+                        type="button" 
+                        data-bs-toggle="collapse" 
+                        data-bs-target="#faq4">
+                    چه روش‌های پرداختی پشتیبانی می‌شود؟
+                </button>
+            </h2>
+            <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                    پرداخت از طریق تمامی کارت‌های عضو شبکه شتاب و درگاه امن بانکی امکان‌پذیر است.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

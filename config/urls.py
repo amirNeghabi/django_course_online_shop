@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from dashboard.admin import dashboard_admin
 
 # Override admin index
 def custom_admin_index(self, request, extra_context=None):
@@ -57,6 +58,11 @@ urlpatterns = [
     path('cart/', include('cart.urls')),
     path('order/', include('orders.urls')),
     path('payment/', include('payment.urls')),
+    path("ai-assistant/", include("ai_assistant.urls")),
+    path('accounts/', include('accounts.urls')),
+    path('dashboard-admin/', dashboard_admin.urls),
+    path('support/', include('support.urls')),
+
 
     # Rosetta (i18n)
     path('rosetta/', include('rosetta.urls')),

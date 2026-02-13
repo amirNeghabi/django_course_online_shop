@@ -19,7 +19,13 @@ class HomePageView(TemplateView):
             active=True
         ).order_by('-datetime_created')[:8]
         
-        # آمار کلی برای hero
+        # محصولات پرفروش (دستی)
+        context['bestseller_products'] = Product.objects.filter(
+            active=True,
+            is_featured=True
+        ).order_by('featured_order', '-datetime_created')[:6]
+        
+        # آمار کلی
         context['total_products'] = Product.objects.filter(active=True).count()
         context['total_users'] = User.objects.count()
         context['total_orders'] = Order.objects.filter(is_paid=True).count()
@@ -29,3 +35,10 @@ class HomePageView(TemplateView):
 
 class AboutUsPageView(TemplateView):
     template_name = 'pages/aboutus.html'
+
+class FAQPageView(TemplateView):
+    template_name = 'pages/faq.html'
+
+class TermsPageView(TemplateView):
+    template_name = 'pages/terms.html'
+

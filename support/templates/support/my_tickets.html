@@ -1,0 +1,371 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block page_title %}تیکت‌های من | دیجی شاپ{% endblock %}
+
+{% block content %}
+<style>
+.tickets-page {
+    min-height: 80vh;
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+    padding: 60px 0;
+}
+
+.tickets-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.tickets-header h1 {
+    color: #fff;
+    font-size: 42px;
+    font-weight: 900;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.tickets-header p {
+    color: rgba(255,255,255,0.7);
+    font-size: 18px;
+}
+
+.tickets-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.new-ticket-btn {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #1a202c;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s;
+}
+
+.new-ticket-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+    color: #1a202c;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    color: rgba(255,255,255,0.7);
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.filter-tab:hover, .filter-tab.active {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: #ffd700;
+    color: #ffd700;
+}
+
+.ticket-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 215, 0, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 20px;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: block;
+    color: inherit;
+}
+
+.ticket-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    border-color: #ffd700;
+}
+
+.ticket-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.ticket-id {
+    color: rgba(255,255,255,0.5);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.ticket-title {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.ticket-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.ticket-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.6);
+    font-size: 14px;
+}
+
+.ticket-meta-item i {
+    color: #ffd700;
+}
+
+.status-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    display: inline-block;
+}
+
+.status-pending {
+    background: rgba(237, 137, 54, 0.2);
+    color: #ed8936;
+    border: 2px solid #ed8936;
+}
+
+.status-answered {
+    background: rgba(72, 187, 120, 0.2);
+    color: #48bb78;
+    border: 2px solid #48bb78;
+}
+
+.status-closed {
+    background: rgba(113, 128, 150, 0.2);
+    color: #718096;
+    border: 2px solid #718096;
+}
+
+.ticket-excerpt {
+    color: rgba(255,255,255,0.7);
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.ticket-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+.messages-count {
+    color: #ffd700;
+    font-weight: 600;
+}
+
+.view-btn {
+    color: #ffd700;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.view-btn:hover {
+    color: #ffed4e;
+    gap: 12px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.empty-state-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    color: #fff;
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.empty-state p {
+    color: rgba(255,255,255,0.6);
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #ffd700;
+    text-decoration: none;
+    font-weight: 600;
+    margin-bottom: 30px;
+    transition: all 0.3s;
+}
+
+.back-link:hover {
+    color: #ffed4e;
+    gap: 12px;
+}
+
+@media (max-width: 768px) {
+    .tickets-header h1 {
+        font-size: 32px;
+    }
+    
+    .ticket-card {
+        padding: 20px;
+    }
+    
+    .ticket-header {
+        flex-direction: column;
+    }
+}
+</style>
+
+<div class="tickets-page">
+    <div class="container">
+        
+        <a href="{% url 'accounts:profile' %}" class="back-link">
+            <i class="fas fa-arrow-right"></i>
+            بازگشت به پروفایل
+        </a>
+
+        <div class="tickets-header">
+            <h1>📋 تیکت‌های من</h1>
+            <p>مشاهده و پیگیری درخواست‌های پشتیبانی</p>
+        </div>
+
+        <div class="tickets-actions">
+            <a href="{% url 'support:ticket_create' %}" class="new-ticket-btn">
+                <i class="fas fa-plus-circle"></i>
+                تیکت جدید
+            </a>
+
+            <div class="filter-tabs">
+                <a href="?status=all" class="filter-tab {% if not request.GET.status or request.GET.status == 'all' %}active{% endif %}">
+                    همه
+                </a>
+                <a href="?status=pending" class="filter-tab {% if request.GET.status == 'pending' %}active{% endif %}">
+                    در حال بررسی
+                </a>
+                <a href="?status=answered" class="filter-tab {% if request.GET.status == 'answered' %}active{% endif %}">
+                    پاسخ داده شده
+                </a>
+                <a href="?status=closed" class="filter-tab {% if request.GET.status == 'closed' %}active{% endif %}">
+                    بسته شده
+                </a>
+            </div>
+        </div>
+
+        {% if tickets %}
+            {% for ticket in tickets %}
+                <a href="{% url 'support:ticket_detail' ticket.pk %}" class="ticket-card">
+                    <div class="ticket-header">
+                        <div>
+                            <div class="ticket-id">#{{ ticket.id }}</div>
+                            <h3 class="ticket-title">{{ ticket.subject }}</h3>
+                            <div class="ticket-meta">
+                                {% if ticket.category %}
+                                <div class="ticket-meta-item">
+                                    <i class="fas fa-folder"></i>
+                                    {{ ticket.category.name }}
+                                </div>
+                                {% endif %}
+                                <div class="ticket-meta-item">
+                                    <i class="fas fa-calendar"></i>
+                                    {{ ticket.created_at|date:"Y/m/d - H:i" }}
+                                </div>
+                            </div>
+                        </div>
+                        <span class="status-badge status-{{ ticket.status }}">
+                            {% if ticket.status == 'pending' %}⏳ در حال بررسی
+                            {% elif ticket.status == 'answered' %}✅ پاسخ داده شده
+                            {% elif ticket.status == 'closed' %}🔒 بسته شده
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    {% if ticket.messages.first %}
+                    <div class="ticket-excerpt">
+                        {{ ticket.messages.first.message|truncatewords:20 }}
+                    </div>
+                    {% endif %}
+
+                    <div class="ticket-footer">
+                        <div class="messages-count">
+                            <i class="fas fa-comments"></i>
+                            {{ ticket.messages.count }} پیام
+                        </div>
+                        <span class="view-btn">
+                            مشاهده جزئیات
+                            <i class="fas fa-arrow-left"></i>
+                        </span>
+                    </div>
+                </a>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">🎫</div>
+                <h3>هنوز تیکتی ثبت نکرده‌اید</h3>
+                <p>اگر سوال یا مشکلی دارید، می‌توانید تیکت جدید ایجاد کنید</p>
+                <a href="{% url 'support:ticket_create' %}" class="new-ticket-btn">
+                    <i class="fas fa-plus-circle"></i>
+                    ثبت اولین تیکت
+                </a>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<script>
+// فیلتر کردن تیکت‌ها
+document.addEventListener('DOMContentLoaded', function() {
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', function(e) {
+            filterTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+});
+</script>
+{% endblock %}

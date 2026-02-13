@@ -17,6 +17,17 @@ class Product(models.Model):
 
     datetime_created = models.DateTimeField(_('Date Time of Creation'), default=timezone.now)
     datetime_modified = models.DateTimeField(auto_now=True)
+    is_featured = models.BooleanField(
+        default=False, 
+        verbose_name='محصول ویژه (پرفروش)',
+        help_text='این محصول در بخش پرفروش‌ها نمایش داده شود؟'
+    )
+    
+    featured_order = models.IntegerField(
+        default=0,
+        verbose_name='ترتیب نمایش',
+        help_text='عدد کوچکتر = نمایش زودتر'
+    )
 
     def __str__(self):
         return self.title

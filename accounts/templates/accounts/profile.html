@@ -1,0 +1,212 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block page_title %}پروفایل کاربری | دیجی شاپ{% endblock %}
+
+{% block extra_css %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary: #4a90e2;
+    --secondary: #50e3c2;
+    --dark: #1a1a2e;
+    --light: #f4f4f8;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --radius: 16px;
+}
+
+body { font-family: 'Vazirmatn', sans-serif; background: var(--light); }
+
+/* هدر پروفایل */
+.profile-header {
+    background: linear-gradient(135deg, #4a90e2, #50e3c2);
+    padding: 40px 30px;
+    border-radius: var(--radius);
+    color: white;
+    text-align: center;
+    margin-bottom: 30px;
+    box-shadow: var(--shadow);
+}
+.profile-header h2 { margin:0; font-size:28px; font-weight:700; }
+.profile-header p { margin-top:8px; font-size:16px; opacity:0.9; }
+
+/* کارت پروفایل */
+.profile-card {
+    background:white;
+    border-radius: var(--radius);
+    padding:30px;
+    text-align:center;
+    box-shadow: var(--shadow);
+    margin-bottom:30px;
+}
+.profile-card img, .avatar-circle {
+    width:100px; height:100px; border-radius:50%;
+    margin-bottom:15px;
+}
+.avatar-circle { background: var(--primary); display:flex; align-items:center; justify-content:center; color:white; font-size:36px; font-weight:700; }
+
+/* آمار */
+.stats-grid { display:flex; justify-content:space-around; margin-top:20px; gap:10px; flex-wrap:wrap; }
+.stat-card { background:white; flex:1; min-width:120px; padding:15px; border-radius: var(--radius); box-shadow: var(--shadow); text-align:center; }
+.stat-card i { font-size:20px; color:var(--primary); margin-bottom:8px; display:block; }
+.stat-value { font-weight:700; font-size:22px; color:var(--dark); }
+.stat-label { font-size:14px; color:#555; }
+
+/* فرم ویرایش */
+.form-card { background:white; border-radius: var(--radius); padding:30px; box-shadow: var(--shadow); margin-bottom:30px; }
+.form-card h4 { margin-bottom:20px; font-weight:700; color:var(--dark); }
+.form-group { margin-bottom:15px; text-align:left; }
+.form-group label { display:block; font-weight:600; margin-bottom:5px; }
+.form-control { width:100%; padding:10px 15px; border-radius: var(--radius); border:1px solid #ddd; font-size:14px; }
+.form-control:focus { border-color: var(--primary); outline:none; }
+.btn-save { background: var(--primary); color:white; border:none; border-radius: var(--radius); padding:12px 20px; font-weight:600; cursor:pointer; width:100%; transition:0.3s; }
+.btn-save:hover { background: #3a78c2; }
+
+/* جدول سفارشات */
+.orders-card { background:white; border-radius: var(--radius); padding:30px; box-shadow: var(--shadow); }
+.orders-card h4 { margin-bottom:20px; font-weight:700; color:var(--dark); }
+.orders-table { width:100%; border-collapse:collapse; }
+.orders-table th, .orders-table td { padding:12px 15px; text-align:center; font-size:14px; }
+.orders-table th { background:#f0f0f5; font-weight:600; color:var(--dark); }
+.orders-table tr { background:white; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom:10px; display:table-row; }
+.orders-table tr td { border:none; }
+.order-badge { padding:6px 12px; border-radius:50px; font-size:13px; font-weight:600; display:inline-block; }
+.badge-paid { background: #d4f0fc; color:#0096c7; }
+.badge-pending { background: #fff4db; color:#f5a623; }
+.btn-order-detail { color:var(--primary); text-decoration:none; font-weight:600; }
+.btn-order-detail:hover { text-decoration:underline; }
+
+/* responsive */
+@media(max-width:768px){
+    .stats-grid { flex-direction:column; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="profile-header">
+        <h2>پروفایل {{ user.get_full_name|default:user.username }}</h2>
+        <p>عضویت از {{ user.date_joined|date:"Y/m/d" }}</p>
+    </div>
+    <div class="profile-card">
+    <div class="card-icon">🎫</div>
+    <h3>تیکت‌های پشتیبانی</h3>
+    <p>مشاهده و پیگیری درخواست‌های شما</p>
+    <a href="{% url 'support:my_tickets' %}" class="card-link">
+        مشاهده تیکت‌ها
+        <i class="fas fa-arrow-left"></i>
+    </a>
+</div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="profile-card">
+                <div class="avatar-circle">{{ user.username|slice:":1"|upper }}</div>
+                <h3>{{ user.get_full_name|default:user.username }}</h3>
+                <p>{{ user.email }}</p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-shopping-bag"></i>
+                        <div class="stat-value">{{ orders.count }}</div>
+                        <div class="stat-label">کل سفارشات</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="stat-value">{{ orders.paid_count|default:0 }}</div>
+                        <div class="stat-label">پرداخت شده</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-value">{{ orders.pending_count|default:0 }}</div>
+                        <div class="stat-label">در انتظار</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="form-card">
+                <h4>ویرایش اطلاعات پروفایل</h4>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>نام کاربری</label>
+                                <input type="text" class="form-control" value="{{ user.username }}" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>ایمیل</label>
+                                <input type="email" class="form-control" value="{{ user.email }}" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>شماره تماس</label>
+                                <input type="text" name="phone" class="form-control" value="{{ user.phone }}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>شهر</label>
+                                <input type="text" name="city" class="form-control" value="{{ user.city }}">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>آدرس</label>
+                                <textarea name="address" class="form-control" rows="2">{{ user.address }}</textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>کد پستی</label>
+                                <input type="text" name="postal_code" class="form-control" value="{{ user.postal_code }}">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-save">ذخیره تغییرات</button>
+                </form>
+            </div>
+
+            <div class="orders-card">
+                <h4>سفارشات اخیر</h4>
+                {% if orders %}
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>شماره سفارش</th>
+                                <th>تاریخ</th>
+                                <th>وضعیت</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in orders|slice:":5" %}
+                            <tr>
+                                <td>#{{ order.id }}</td>
+                                <td>{{ order.datetime_created|date:"Y/m/d" }}</td>
+                                <td>
+                                    {% if order.is_paid %}
+                                        <span class="order-badge badge-paid">پرداخت شده</span>
+                                    {% else %}
+                                        <span class="order-badge badge-pending">در انتظار پرداخت</span>
+                                    {% endif %}
+                                </td>
+                                <td><a href="/order/my-orders/{{ order.id }}" class="btn-order-detail">جزئیات</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>هنوز سفارشی ثبت نکرده‌اید!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

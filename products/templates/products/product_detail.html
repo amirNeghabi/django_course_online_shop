@@ -230,7 +230,7 @@
                     <a class="nav-link active" data-bs-toggle="tab" href="#description"><i class="fas fa-align-right"></i> توضیحات</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#comments"><i class="fas fa-comments"></i> نظرات ({{ product.comments.count }})</a>
+                    <a class="nav-link" data-bs-toggle="tab" href="#comments"><i class="fas fa-comments"></i> نظرات ({{ active_comments.count }}) </a>
                 </li>
             </ul>
             
@@ -239,56 +239,121 @@
                     <div style="color: #4a5568; line-height: 2;">{{ product.description|safe }}</div>
                 </div>
                 
-                <div class="tab-pane fade" id="comments">
-                    <h3 style="font-size: 22px; font-weight: 700; color: #2d3748; margin-bottom: 25px;">نظرات کاربران ({{ product.comments.count }})</h3>
-                    
-                    {% for comment in product.comments.all %}
-                        <div class="comment-item">
-                            <div class="comment-author"><i class="fas fa-user-circle"></i> {{ comment.author.get_full_name|default:comment.author.email }}</div>
-                            <div class="comment-date"><i class="far fa-clock"></i> {{ comment.datetime_created|date:"Y/m/d" }}</div>
-                            <div class="comment-text">{{ comment.body }}</div>
-                            {% if comment.stars %}
-                                <div style="color:#f5b301; font-size:18px;">
-                                    {% for i in "12345"|slice:":comment.stars"|make_list %}
-                                        ★
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        </div>
-                    {% empty %}
-                        <div style="text-align: center; padding: 60px 20px; color: #adb5bd;">
-                            <i class="far fa-comment-dots" style="font-size: 60px; margin-bottom: 20px;"></i>
-                            <p style="font-size: 18px;">هنوز نظری ثبت نشده است</p>
-                        </div>
-                    {% endfor %}
-                    
-                    {% if user.is_authenticated %}
-                        <div class="comment-form">
-                            <h4 style="font-size: 18px; font-weight: 700; color: #2d3748; margin-bottom: 20px;"><i class="fas fa-pen"></i> نظر خود را بنویسید</h4>
-                            <form action="{% url 'comment_create' product.id %}" method="POST">
-                                {% csrf_token %}
-                                <textarea name="body" placeholder="نظر خود را بنویسید..." required></textarea>
-
-                                <div class="star-rating" style="margin: 15px 0;">
-                                    <label style="font-weight: 600; color: #2d3748;">امتیاز:</label>
-                                    <div class="stars">
-                                        <input type="radio" name="stars" id="star5" value="5"><label for="star5">★</label>
-                                        <input type="radio" name="stars" id="star4" value="4"><label for="star4">★</label>
-                                        <input type="radio" name="stars" id="star3" value="3"><label for="star3">★</label>
-                                        <input type="radio" name="stars" id="star2" value="2"><label for="star2">★</label>
-                                        <input type="radio" name="stars" id="star1" value="1"><label for="star1">★</label>
-                                    </div>
-                                </div>
-
-                                <button type="submit" class="submit-comment-btn"><i class="fas fa-paper-plane"></i> ثبت نظر</button>
-                            </form>
-                        </div>
-                    {% else %}
-                        <div style="background: #fff3cd; padding: 20px; border-radius: 8px; text-align: center; margin-top: 30px;">
-                            <p style="color: #856404; margin: 0;">برای ثبت نظر لطفاً <a href="{% url 'account_login' %}" style="color: #667eea; font-weight: 600;">وارد شوید</a></p>
-                        </div>
-                    {% endif %}
+<div class="tab-pane fade" id="comments">
+    <h3 style="font-size: 22px; font-weight: 700; color: #2d3748; margin-bottom: 25px;">
+        نظرات کاربران ({{ active_comments.count }})
+    </h3>
+    
+    {% for comment in product.comments.all %}
+        {% if comment.active %}
+            <div class="comment-item">
+                <div class="comment-author">
+                    <i class="fas fa-user-circle"></i> 
+                    {{ comment.author.get_full_name|default:comment.author.email }}
                 </div>
+                <div class="comment-date">
+                    <i class="far fa-clock"></i> {{ comment.datetime_created|date:"Y/m/d" }}
+                </div>
+                <div class="comment-text">{{ comment.body }}</div>
+                {% if comment.stars %}
+                    <div style="margin-top: 10px;">
+                        <div style="color:#f5b301; font-size:18px; display: inline-block;">
+                            {% for i in "12345"|make_list %}
+                                {% if forloop.counter <= comment.stars|add:"0" %}
+                                    ★
+                                {% else %}
+                                    ☆
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <span style="color:#6c757d; margin-right: 8px;">
+                            ({{ comment.get_stars_display }})
+                        </span>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% empty %}
+        <div style="text-align: center; padding: 60px 20px; color: #adb5bd;">
+            <i class="far fa-comment-dots" style="font-size: 60px; margin-bottom: 20px;"></i>
+            <p style="font-size: 18px;">هنوز نظری ثبت نشده است</p>
+            <p style="font-size: 14px;">شما می‌توانید اولین نفری باشید که نظر می‌دهید!</p>
+        </div>
+    {% endfor %}
+    
+    <!-- بقیه کدهای فرم کامنت همونطور باقی می‌مونه -->
+    ...
+</div>
+    
+    {% if user.is_authenticated %}
+        <div class="comment-form">
+            <h4 style="font-size: 18px; font-weight: 700; color: #2d3748; margin-bottom: 20px;">
+                <i class="fas fa-pen"></i> نظر خود را بنویسید
+            </h4>
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <form action="{% url 'comment_create' product.id %}" method="POST">
+                {% csrf_token %}
+                
+                <div style="margin-bottom: 20px;">
+                    <label style="font-weight: 600; color: #2d3748; display: block; margin-bottom: 10px;">
+                        متن نظر:
+                    </label>
+                    <textarea name="body" placeholder="نظر خود را بنویسید..." required 
+                              style="width: 100%; padding: 15px; border: 2px solid #e9ecef; border-radius: 8px; min-height: 120px;"></textarea>
+                </div>
+
+                <div class="star-rating" style="margin: 20px 0;">
+                    <label style="font-weight: 600; color: #2d3748; display: block; margin-bottom: 10px;">
+                        امتیاز شما به این محصول:
+                    </label>
+                    <div class="stars">
+                        <input type="radio" name="stars" id="star5" value="5" required>
+                        <label for="star5" title="عالی">★</label>
+                        
+                        <input type="radio" name="stars" id="star4" value="4" required>
+                        <label for="star4" title="خوب">★</label>
+                        
+                        <input type="radio" name="stars" id="star3" value="3" required>
+                        <label for="star3" title="معمولی">★</label>
+                        
+                        <input type="radio" name="stars" id="star2" value="2" required>
+                        <label for="star2" title="بد">★</label>
+                        
+                        <input type="radio" name="stars" id="star1" value="1" required>
+                        <label for="star1" title="خیلی بد">★</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-comment-btn">
+                    <i class="fas fa-paper-plane"></i> ثبت نظر
+                </button>
+            </form>
+        </div>
+    {% else %}
+        <div style="background: #fff3cd; padding: 25px; border-radius: 12px; text-align: center; margin-top: 30px; border: 1px solid #ffeeba;">
+            <i class="fas fa-sign-in-alt" style="font-size: 24px; color: #856404; margin-bottom: 10px;"></i>
+            <p style="color: #856404; margin: 0; font-size: 16px;">
+                برای ثبت نظر لطفاً 
+                <a href="{% url 'account_login' %}" style="color: #667eea; font-weight: 600; text-decoration: none;">
+                    وارد شوید
+                </a>
+                یا 
+                <a href="{% url 'account_signup' %}" style="color: #667eea; font-weight: 600; text-decoration: none;">
+                    ثبت نام کنید
+                </a>
+            </p>
+        </div>
+    {% endif %}
+</div>
             </div>
         </div>
     </div>
